@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:path/path.dart';
-
 import '../../config/api/index.dart';
 
 var transcript = "Nothing here";
