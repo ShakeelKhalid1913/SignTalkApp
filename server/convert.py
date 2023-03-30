@@ -1,7 +1,8 @@
-import pytube
-from moviepy.editor import VideoFileClip
+import subprocess
+import json
 import whisper
 import os
+import yt_dlp as youtube_dl
 
 type = 'small'
 model = whisper.load_model(type)
@@ -14,33 +15,51 @@ def audio_to_text(filename):
     return text
 
 def download_video(url):
-    video = pytube.YouTube(url)
-    stream = video.streams.get_by_itag(18)
-    stream.download()
-    return stream.default_filename
+    URLS = [url]
 
-def convert_to_mp3(filename):
-    clip = VideoFileClip(filename)
-    clip.audio.write_audiofile(filename[:-4] + ".mp3")
-    clip.close()
+    ydl_opts = {
+        'format': 'm4a/bestaudio/best',
+        'postprocessors': [{  # Extract audio using ffmpeg
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+        }],
+        'outtmpl': 'temp/audio'
+    }
+
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        error_code = ydl.download(URLS)
+
+    print("Error" if error_code == 0 else "Success")
+
+    return "temp/audio.mp3"
 
 def youtube_to_text(url):
     print("Downloading video... Please wait.")
 
     try:
         filename = download_video(url)
-        print("Downloaded video as " + filename)
+        print("Downloaded audio as " + filename)
     except Exception as e:
         print(e)
         return "Not a valid link.."
-    try:
-        convert_to_mp3(filename)
-        print("Video converted to mp3")
-    except:
-        return "Error converting video to mp3"
 
-    result = audio_to_text(filename[:-4] + ".mp3")
-    os.remove(filename)
+    result = audio_to_text(filename)
     return result
 
-# print(youtube_to_text('https://youtu.be/2lAe1cqCOXo'))
+if __name__ == "__main__":
+    # print(youtube_to_text('https://youtu.be/hEVQch72TBo'))
+    # download_video('https://youtu.be/hEVQch72TBo')
+
+    input_file  = "temp/audio.mp3"
+
+    metadata = subprocess.check_output(f"ffprobe -i {input_file} -v quiet -print_format json -show_format -hide_banner".split(" "))
+
+    metadata = json.loads(metadata)
+    print(f"Length of file is: {float(metadata['format']['duration'])}")
+
+
+    # Define the desired duration of each subpart (in seconds)
+    subpart_duration = 30
+
+    # Run the ffmpeg command to split the video into subparts
+    subprocess.call(['ffmpeg', '-i', input_file, '-c', 'copy', '-map', '0', '-segment_time', str(subpart_duration), '-f', 'segment', 'temp/subpart_%03d.mp3'])
