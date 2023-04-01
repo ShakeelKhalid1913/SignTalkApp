@@ -3,8 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../config/api/audio_recorder.dart';
+import '../../config/services/audio_recorder.dart';
 import '../../constants/theme.dart';
+import '../../constants/icons.dart' as CustomIcons;
 
 class TextMicInputWidget extends StatefulWidget {
   final TextEditingController inputController;
@@ -96,11 +97,7 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
               ? FloatingActionButton(
                   onPressed: () {},
                   backgroundColor: Themes.kColor,
-                  child: Icon(
-                    Icons.send,
-                    size: 30,
-                    color: Colors.white,
-                  ),
+                  child: CustomIcons.sendIcon(30)
                 )
               : GestureDetector(
                   onTapDown: (details) {
@@ -111,8 +108,9 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
                   child: CircleAvatar(
                     radius: 30,
                     backgroundColor: Themes.kColor,
-                    child: Icon(_isRecording ? Icons.mic : Icons.mic_off,
-                        color: Colors.white),
+                    child: _isRecording
+                        ? CustomIcons.micDisableIcon(30)
+                        : CustomIcons.micIcon(30),
                   ),
                 ),
         ],

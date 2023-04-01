@@ -13,7 +13,7 @@ class CustomPopupMenu extends StatefulWidget {
 }
 
 class _CustomPopupMenuState extends State<CustomPopupMenu> {
-  Options? _selectedOption;
+  late Options _selectedOption;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
             },
           ),
         ),
-        const PopupMenuItem<Options>(
+        PopupMenuItem<Options>(
           value: Options.url,
           child: ListTile(
             leading: Icon(Icons.link, color: Themes.kColor),

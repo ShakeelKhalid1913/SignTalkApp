@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:signtalk/src/screens/home/popup.menu.dart';
 import 'package:signtalk/src/screens/home/text_mic.input.dart';
 import 'package:signtalk/src/widgets/appdrawer.widget.dart';
-import '../../config/api/audio_recorder.dart';
+import '../../config/services/audio_recorder.dart';
 import '../../constants/globals/index.dart' as globals;
 
 class HomeScreen extends StatefulWidget {
@@ -35,13 +35,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<String> transcript(String method) async {
     print(method);
-    if (method == "Mic") {
+    if (method == "Mic")
       return await globals
           .transcriptFile(_audioRecorder.recordFilePath)
           .then((value) => value)
           .catchError(
               (error) => "Error in transcripting file: ${error.toString()}");
-    } else if (method == "File") {
+    else if (method == "File") {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         allowedExtensions: ['wav', 'mp3', 'm4a', 'mp4'],
         type: FileType.custom,
@@ -53,12 +53,10 @@ class _HomeScreenState extends State<HomeScreen> {
             .then((value) => value)
             .catchError(
                 (error) => "Error in transcripting file: ${error.toString()}");
-      } else {
+      } else
         return "File did not pick";
-      }
-    } else {
+    } else
       return "No method selected";
-    }
   }
 
   @override
@@ -84,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 setMethodOfTranscript: setMethodOfTranscript,
                 audioRecorder: _audioRecorder,
               ),
+              // Character(),
               if (_method != "None")
                 FutureBuilder<String>(
                   future: transcript(_method),
