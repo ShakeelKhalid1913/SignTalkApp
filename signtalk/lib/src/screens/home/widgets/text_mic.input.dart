@@ -1,11 +1,10 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../config/services/audio_recorder.dart';
-import '../../constants/theme.dart';
-import '../../constants/icons.dart' as CustomIcons;
+import '../../../config/services/audio_recorder.dart';
+import '../../../constants/theme.dart';
 
 class TextMicInputWidget extends StatefulWidget {
   final TextEditingController inputController;
@@ -35,9 +34,8 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
         _isRecording = true;
       });
       widget.setStatusText("Recording");
-    } else {
+    } else
       widget.setStatusText("Permission not granted");
-    }
   }
 
   void _stopRecording() async {
@@ -52,11 +50,7 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
 
   void changeMode() {
     setState(() {
-      if (widget.inputController.text.isNotEmpty) {
-        mode = "text";
-      } else {
-        mode = "mic";
-      }
+      mode = widget.inputController.text.isNotEmpty ? "text" : "mic";
     });
   }
 
@@ -69,26 +63,23 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.5),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: TextField(
-                  controller: widget.inputController,
-                  decoration: InputDecoration(
-                    hintText: "Type to translate",
-                    labelText: "Translate",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: TextField(
+                controller: widget.inputController,
+                decoration: InputDecoration(
+                  hintText: "Type to translate",
+                  labelText: "Translate",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
                   ),
-                  onChanged: (value) {
-                    changeMode();
-                  },
                 ),
+                onChanged: (value) {
+                  changeMode();
+                },
               ),
             ),
           ),
@@ -97,8 +88,7 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
               ? FloatingActionButton(
                   onPressed: () {},
                   backgroundColor: Themes.kColor,
-                  child: CustomIcons.sendIcon(30)
-                )
+                  child: FaIcon(FontAwesomeIcons.paperPlane))
               : GestureDetector(
                   onTapDown: (details) {
                     _startRecording();
@@ -106,12 +96,11 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
                   },
                   onTapUp: (details) => _stopRecording(),
                   child: CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Themes.kColor,
-                    child: _isRecording
-                        ? CustomIcons.micDisableIcon(30)
-                        : CustomIcons.micIcon(30),
-                  ),
+                      radius: 30,
+                      backgroundColor: Themes.kColor,
+                      child: _isRecording
+                          ? FaIcon(FontAwesomeIcons.stop)
+                          : FaIcon(FontAwesomeIcons.microphone)),
                 ),
         ],
       ),

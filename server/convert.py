@@ -46,6 +46,7 @@ def youtube_to_text(url):
     result = audio_to_text(filename)
     return result
 
+# for testing purpose
 if __name__ == "__main__":
     # print(youtube_to_text('https://youtu.be/hEVQch72TBo'))
     # download_video('https://youtu.be/hEVQch72TBo')

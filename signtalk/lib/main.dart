@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:signtalk/src/constants/theme.dart';
+import 'package:signtalk/src/screens/about/index.dart';
 import 'package:signtalk/src/screens/home/index.dart';
+import 'package:signtalk/src/screens/onboarding/index.dart';
 import 'package:signtalk/src/utils/routes.dart';
 
 void main(List<String> args) {
@@ -20,7 +22,9 @@ class SignTalkApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       initialRoute: '/',
       routes: {
+        Routes.onBoardingScreen: (_) => OnBoardingScreen(),
         Routes.homeScreen: (_) => HomeScreen(),
+        Routes.aboutScreen: (_) => AboutUsScreen(),
       },
     );
   }

@@ -1,3 +1,5 @@
 class Routes {
-  static String homeScreen = "/";
+  static String onBoardingScreen = "/";
+  static String homeScreen = "/home";
+  static String aboutScreen = "/about";
 }

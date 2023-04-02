@@ -21,12 +21,13 @@ class Themes {
   static ThemeData lightTheme(context) => ThemeData(
       primarySwatch: kColor,
       brightness: Brightness.light,
-      fontFamily: GoogleFonts.lato().fontFamily,
+      fontFamily: GoogleFonts.firaSans().fontFamily,
       appBarTheme: AppBarTheme(
           color: kColor,
           elevation: 0.0,
-          titleTextStyle: TextStyle(color: kColor[900], fontSize: 20),
-          iconTheme: IconThemeData(color: kColor[900])));
+          centerTitle: true,
+          titleTextStyle: TextStyle(color: kColor, fontWeight: FontWeight.bold, fontSize: 30, fontFamily: 'Pacifico'),
+          iconTheme: IconThemeData(color: kColor)));
 
   static ThemeData darkTheme(context) => ThemeData(
     brightness: Brightness.dark,

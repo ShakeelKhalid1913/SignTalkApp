@@ -23,6 +23,7 @@ dependencies:
   permission_handler: ^10.2.0
   record_mp3: ^3.0.0
   rename: ^2.1.1
+  rive: ^0.10.3
   video_player: ^2.6.0
 
 dev_dependencies:
@@ -32,16 +33,10 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/icon.png
-    - assets/images/icon1.png
-    - assets/images/fullscreen.jpg
-    - assets/images/flutter.png
-    - assets/images/img1.jpg
-    - assets/images/img2.jpg
-    - assets/images/img3.jpg
-    - assets/character/character.glb
+    - assets/images/
+    - assets/character/
+    - assets/rive/
   # fonts:
   #   - family: Schyler
   #     fonts:
