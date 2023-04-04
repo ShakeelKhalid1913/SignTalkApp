@@ -9,7 +9,7 @@ model = whisper.load_model(type)
 
 def audio_to_text(filename):
     print("Converting audio to text... Please wait.")
-    result = model.transcribe(filename)
+    result = model.transcribe(filename, fp16=False)
     os.remove(filename)
     text = result["text"]
     return text
@@ -48,19 +48,19 @@ def youtube_to_text(url):
 
 # for testing purpose
 if __name__ == "__main__":
-    # print(youtube_to_text('https://youtu.be/hEVQch72TBo'))
+    print(youtube_to_text('https://youtu.be/hEVQch72TBo'))
     # download_video('https://youtu.be/hEVQch72TBo')
 
-    input_file  = "temp/audio.mp3"
+    # input_file  = "temp/audio.mp3"
 
-    metadata = subprocess.check_output(f"ffprobe -i {input_file} -v quiet -print_format json -show_format -hide_banner".split(" "))
+    # metadata = subprocess.check_output(f"ffprobe -i {input_file} -v quiet -print_format json -show_format -hide_banner".split(" "))
 
-    metadata = json.loads(metadata)
-    print(f"Length of file is: {float(metadata['format']['duration'])}")
+    # metadata = json.loads(metadata)
+    # print(f"Length of file is: {float(metadata['format']['duration'])}")
 
 
-    # Define the desired duration of each subpart (in seconds)
-    subpart_duration = 30
+    # # Define the desired duration of each subpart (in seconds)
+    # subpart_duration = 30
 
-    # Run the ffmpeg command to split the video into subparts
-    subprocess.call(['ffmpeg', '-i', input_file, '-c', 'copy', '-map', '0', '-segment_time', str(subpart_duration), '-f', 'segment', 'temp/subpart_%03d.mp3'])
+    # # Run the ffmpeg command to split the video into subparts
+    # subprocess.call(['ffmpeg', '-i', input_file, '-c', 'copy', '-map', '0', '-segment_time', str(subpart_duration), '-f', 'segment', 'temp/subpart_%03d.mp3'])

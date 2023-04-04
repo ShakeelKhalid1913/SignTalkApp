@@ -6,12 +6,17 @@ import 'package:signtalk/src/config/services/audio_recorder.dart';
 
 import '../../../constants/globals/index.dart' as globals;
 
+// ignore: must_be_immutable
 class TranscribeTextBuilder extends StatefulWidget {
   final AudioRecorder _audioRecorder;
   final String _method;
+  final Function(String) setMethodOfTranscript;
 
-  const TranscribeTextBuilder(
-      {super.key, required AudioRecorder audioRecorder, required String method})
+  TranscribeTextBuilder(
+      {super.key,
+      required AudioRecorder audioRecorder,
+      required String method,
+      required this.setMethodOfTranscript})
       : _audioRecorder = audioRecorder,
         _method = method;
 
@@ -22,28 +27,23 @@ class TranscribeTextBuilder extends StatefulWidget {
 class _TranscribeTextBuilderState extends State<TranscribeTextBuilder> {
   Future<String> transcript(String method) async {
     print(method);
-    if (method == "Mic")
-      return await globals
-          .transcriptFile(widget._audioRecorder.recordFilePath)
-          .then((value) => value)
-          .catchError(
-              (error) => "Error in transcripting file: ${error.toString()}");
-    else if (method == "File") {
+    if (method == "Mic") {
+      return globals.transcriptFile(widget._audioRecorder.recordFilePath);
+    } else if (method == "File") {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         allowedExtensions: ['wav', 'mp3', 'm4a', 'mp4'],
         type: FileType.custom,
       );
       if (result != null) {
         File file = File(result.files.single.path!);
-        return await globals
-            .transcriptFile(file.path)
-            .then((value) => value)
-            .catchError(
-                (error) => "Error in transcripting file: ${error.toString()}");
+        return globals.transcriptFile(file.path);
       } else
         return "File did not pick";
+    } else if (method == "Youtube") {
+      print(globals.transcript.text);
+      return globals.transcriptYoutubeVideo("https://youtu.be/ZDQDWLhfsEY");
     } else
-      return "No method selected";
+      return "Error in transcripting file";
   }
 
   @override

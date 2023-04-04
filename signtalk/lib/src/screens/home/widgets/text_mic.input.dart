@@ -1,10 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:signtalk/src/constants/colors.dart';
 
 import '../../../config/services/audio_recorder.dart';
-import '../../../constants/theme.dart';
 
 class TextMicInputWidget extends StatefulWidget {
   final TextEditingController inputController;
@@ -65,17 +65,26 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.5),
+                color:AppColors.whiteColor.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: TextField(
+              child: TextFormField(
                 controller: widget.inputController,
+                maxLines: 1,
+                cursorColor: Color(0xFF13F5B2),
+                style: GoogleFonts.quicksand(
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFF302E5B),
+                ),
                 decoration: InputDecoration(
-                  hintText: "Type to translate",
-                  labelText: "Translate",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
+                  hintText: 'Enter Text to translate',
+                  hintStyle: GoogleFonts.quicksand(
+                    color: Color(0xFF9B9BA6),
+                    fontWeight: FontWeight.w500,
                   ),
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 16.0),
                 ),
                 onChanged: (value) {
                   changeMode();
@@ -87,20 +96,39 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
           mode == "text"
               ? FloatingActionButton(
                   onPressed: () {},
-                  backgroundColor: Themes.kColor,
-                  child: FaIcon(FontAwesomeIcons.paperPlane))
+                  backgroundColor: AppColors.kColor,
+                  child: Container(
+                    height: 56,
+                    width: 56,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: AppColors.kColor,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: FaIcon(
+                      FontAwesomeIcons.solidPaperPlane,
+                      color:AppColors.whiteColor,
+                    ),
+                  ))
               : GestureDetector(
                   onTapDown: (details) {
                     _startRecording();
                     HapticFeedback.heavyImpact();
                   },
                   onTapUp: (details) => _stopRecording(),
-                  child: CircleAvatar(
-                      radius: 30,
-                      backgroundColor: Themes.kColor,
-                      child: _isRecording
-                          ? FaIcon(FontAwesomeIcons.stop)
-                          : FaIcon(FontAwesomeIcons.microphone)),
+                  child: Container(
+                    height: 56,
+                    width: 56,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: AppColors.kColor,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: _isRecording
+                        ? FaIcon(FontAwesomeIcons.stop, color:AppColors.whiteColor)
+                        : FaIcon(FontAwesomeIcons.microphone,
+                            color:AppColors.whiteColor),
+                  ),
                 ),
         ],
       ),

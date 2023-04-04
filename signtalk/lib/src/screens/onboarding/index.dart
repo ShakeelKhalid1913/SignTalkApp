@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 import 'package:signtalk/src/utils/routes.dart';
 
+import '../../constants/colors.dart';
 import 'widgets/animated_btn.widget.dart';
 
 class OnBoardingScreen extends StatefulWidget {
@@ -75,9 +76,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           "SignTalk",
                           style: TextStyle(
                             fontSize: 60,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.bold,
                             height: 1.2,
+                            color: AppColors.kColor
                           ),
                         ),
                         SizedBox(height: 16),
@@ -110,7 +111,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     child: RichText(
                         text: TextSpan(
                             style: TextStyle(
-                              color: Colors.black,
+                              color: AppColors.blackColor,
                               fontSize: 14,
                             ),
                             text: "By continuing, you agree to our ",

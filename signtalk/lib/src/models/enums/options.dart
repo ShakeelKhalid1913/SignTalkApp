@@ -1,3 +1,3 @@
 enum Options{
-  file, url
+  file, url, help, about
 }

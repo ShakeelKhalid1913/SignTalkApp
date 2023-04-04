@@ -12,6 +12,7 @@ class Api {
 
   static Future<http.StreamedResponse> uploadAudio(
       String path, String filename) async {
+
     var request = http.MultipartRequest('POST', Uri.parse(audio2text));
     request.files.add(
         await http.MultipartFile.fromPath('file', path, filename: filename));
@@ -19,7 +20,6 @@ class Api {
   }
 
   static Future<http.Response> transcriptYoutubeVideo(String youtubeUrl) async {
-    //send youtube_url to server the key is url
     return await http.post(
       Uri.parse(youtube2text),
       headers: <String, String>{

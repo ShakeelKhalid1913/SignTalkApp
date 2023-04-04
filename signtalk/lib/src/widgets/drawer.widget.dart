@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:signtalk/src/constants/theme.dart';
+import 'package:signtalk/src/constants/colors.dart';
 
 class AppDrawer extends StatelessWidget {
   AppDrawer({super.key});
@@ -11,17 +11,18 @@ class AppDrawer extends StatelessWidget {
       text: TextSpan(
         children: <TextSpan>[
           TextSpan(
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(color: AppColors.blackColor),
               text:
                   "We are team of deveolpers who have created this app to help "
-                  " to communicate with the people who are deaf and hard of hearing. "
+                  "to communicate with the people who are deaf and hard of hearing. "
                   "We are dedicated to creating high-quality mobile applications that "
                   "make your life "
                   "easier. Our apps are designed with a focus on usability, "
                   "performance, and user experience."),
           TextSpan(
-              text: 'www.signtalk.com', style: TextStyle(color: Themes.kColor)),
-          TextSpan(text: '.', style: TextStyle(color: Colors.black)),
+              text: 'www.signtalk.com',
+              style: TextStyle(color: AppColors.kColor)),
+          TextSpan(text: '.', style: TextStyle(color: AppColors.blackColor)),
         ],
       ),
     ),
@@ -41,14 +42,14 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: FaIcon(FontAwesomeIcons.question, color: Themes.kColor),
+            leading: FaIcon(FontAwesomeIcons.question, color: AppColors.kColor),
             title: Text(
               "Help",
             ),
             onTap: () {},
           ),
           AboutListTile(
-            icon: FaIcon(FontAwesomeIcons.circleInfo, color: Themes.kColor),
+            icon: FaIcon(FontAwesomeIcons.circleInfo, color: AppColors.kColor),
             applicationIcon: ImageIcon(
               AssetImage('assets/images/icon1.png'),
             ),
