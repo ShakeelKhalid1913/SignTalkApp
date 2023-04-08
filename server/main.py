@@ -1,6 +1,6 @@
 from fastapi import FastAPI, File, UploadFile
 from pydantic import BaseModel
-from convert import audio_to_text, youtube_to_text
+from convert import audio_to_text, transcript_video
 
 class Transcript(BaseModel):
     youtube_url: str
@@ -24,16 +24,9 @@ async def audio(file: UploadFile = File()):
 @app.post('/youtube')
 async def youtube(transcript: Transcript):
     print(transcript.dict())
-    text = youtube_to_text(transcript.youtube_url)
+    text = transcript_video(transcript.youtube_url)
     return {"text": text}
-
-# @app.post("/your-route")
-# async def your_route_handler(transcript: Transcript):
-#     print(transcript.dict())
-#     return {"message": "Success!"}
 
 if __name__ == '__main__':
     import uvicorn
     uvicorn.run(app, host='127.0.0.1', port=8000)
-
-#to run: uvicorn main:app --host 127.0.0.1 --port 8000

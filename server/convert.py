@@ -1,8 +1,8 @@
-import subprocess
-import json
 import whisper
 import os
-import yt_dlp as youtube_dl
+import re
+from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api.formatters import TextFormatter
 
 type = 'small'
 model = whisper.load_model(type)
@@ -14,53 +14,22 @@ def audio_to_text(filename):
     text = result["text"]
     return text
 
-def download_video(url):
-    URLS = [url]
+def transcript_video(url):
+    # get id of youtube video from url
+    print('checking if url is valid...')
+    pattern = re.compile(r'(?:https://)?(?:www\.)?(?:youtube\.com/watch\?v=|youtu\.be/)([\w-]+)')
+    match = pattern.search(url)
 
-    ydl_opts = {
-        'format': 'm4a/bestaudio/best',
-        'postprocessors': [{  # Extract audio using ffmpeg
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-        }],
-        'outtmpl': 'temp/audio'
-    }
+    if match:
+        print('transcripting video...')
+        video_id = match.group(1)
+        transcript =  YouTubeTranscriptApi.get_transcript(video_id, languages=['en'])
+        formatter = TextFormatter()
 
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        error_code = ydl.download(URLS)
-
-    print("Error" if error_code == 0 else "Success")
-
-    return "temp/audio.mp3"
-
-def youtube_to_text(url):
-    print("Downloading video... Please wait.")
-
-    try:
-        filename = download_video(url)
-        print("Downloaded audio as " + filename)
-    except Exception as e:
-        print(e)
-        return "Not a valid link.."
-
-    result = audio_to_text(filename)
-    return result
+        return formatter.format_transcript(transcript).replace('\n', ' ')
+    else:
+        return 'Invalid youtube video link..'
 
 # for testing purpose
 if __name__ == "__main__":
-    print(youtube_to_text('https://youtu.be/hEVQch72TBo'))
-    # download_video('https://youtu.be/hEVQch72TBo')
-
-    # input_file  = "temp/audio.mp3"
-
-    # metadata = subprocess.check_output(f"ffprobe -i {input_file} -v quiet -print_format json -show_format -hide_banner".split(" "))
-
-    # metadata = json.loads(metadata)
-    # print(f"Length of file is: {float(metadata['format']['duration'])}")
-
-
-    # # Define the desired duration of each subpart (in seconds)
-    # subpart_duration = 30
-
-    # # Run the ffmpeg command to split the video into subparts
-    # subprocess.call(['ffmpeg', '-i', input_file, '-c', 'copy', '-map', '0', '-segment_time', str(subpart_duration), '-f', 'segment', 'temp/subpart_%03d.mp3'])
+    print(transcript_video('https://youtu.be/lMvFWKHhVZ0'))

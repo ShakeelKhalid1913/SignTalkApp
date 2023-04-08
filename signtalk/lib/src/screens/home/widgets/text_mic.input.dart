@@ -68,7 +68,7 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
                 color:AppColors.whiteColor.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: TextFormField(
+              child: TextField(
                 controller: widget.inputController,
                 maxLines: 1,
                 cursorColor: Color(0xFF13F5B2),
@@ -83,12 +83,10 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
                     fontWeight: FontWeight.w500,
                   ),
                   border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(
+                  contentPadding: EdgeInsets.symmetric(
                       vertical: 8.0, horizontal: 16.0),
                 ),
-                onChanged: (value) {
-                  changeMode();
-                },
+                onChanged: (value) => changeMode(),
               ),
             ),
           ),
