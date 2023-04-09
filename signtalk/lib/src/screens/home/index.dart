@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:signtalk/src/screens/home/widgets/character.widget.dart';
 import 'package:signtalk/src/screens/home/widgets/popup.menu.dart';
 import 'package:signtalk/src/screens/home/widgets/text_mic.input.dart';
 import 'package:signtalk/src/screens/home/widgets/transcribe_text.builder.dart';
@@ -44,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
               setMethodOfTranscript: setMethodOfTranscript,
               audioRecorder: _audioRecorder,
             ),
-            // Character(),
+            Character(),
             if (_method != "None")
               TranscribeTextBuilder(
                 method: _method,

@@ -1,5 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:signtalk/src/constants/colors.dart';
@@ -24,6 +26,7 @@ class TextMicInputWidget extends StatefulWidget {
 }
 
 class _TextMicInputWidget extends State<TextMicInputWidget> {
+  Timer? _timer;
   String mode = "mic";
   bool _isRecording = false;
 
@@ -54,6 +57,26 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
     });
   }
 
+  void _onLongPressStart(LongPressStartDetails details) {
+    _timer = Timer(Duration(seconds: 3), () {
+      _timer = null;
+      _startRecording();
+    });
+  }
+
+  void _onLongPressEnd(LongPressEndDetails details) {
+    if (_timer != null) {
+      _timer?.cancel();
+      _timer = null;
+
+      Fluttertoast.showToast(
+        msg: 'Please hold the button for at least 3 seconds.',
+      );
+    } else {
+      _stopRecording();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -65,7 +88,7 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color:AppColors.whiteColor.withOpacity(0.5),
+                color: AppColors.whiteColor.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: TextField(
@@ -73,8 +96,8 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
                 maxLines: 1,
                 cursorColor: Color(0xFF13F5B2),
                 style: GoogleFonts.quicksand(
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF302E5B),
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF302E5B),
                 ),
                 decoration: InputDecoration(
                   hintText: 'Enter Text to translate',
@@ -83,8 +106,8 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
                     fontWeight: FontWeight.w500,
                   ),
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(
-                      vertical: 8.0, horizontal: 16.0),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                 ),
                 onChanged: (value) => changeMode(),
               ),
@@ -105,15 +128,12 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
                     ),
                     child: FaIcon(
                       FontAwesomeIcons.solidPaperPlane,
-                      color:AppColors.whiteColor,
+                      color: AppColors.whiteColor,
                     ),
                   ))
               : GestureDetector(
-                  onTapDown: (details) {
-                    _startRecording();
-                    HapticFeedback.heavyImpact();
-                  },
-                  onTapUp: (details) => _stopRecording(),
+                  onLongPressStart: _onLongPressStart,
+                  onLongPressEnd: _onLongPressEnd,
                   child: Container(
                     height: 56,
                     width: 56,
@@ -123,9 +143,10 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: _isRecording
-                        ? FaIcon(FontAwesomeIcons.stop, color:AppColors.whiteColor)
+                        ? FaIcon(FontAwesomeIcons.stop,
+                            color: AppColors.whiteColor)
                         : FaIcon(FontAwesomeIcons.microphone,
-                            color:AppColors.whiteColor),
+                            color: AppColors.whiteColor),
                   ),
                 ),
         ],

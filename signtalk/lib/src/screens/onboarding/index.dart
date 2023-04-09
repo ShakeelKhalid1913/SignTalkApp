@@ -73,13 +73,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     child: Column(
                       children: const [
                         Text(
-                          "SignTalk",
+                          "Sign Talk",
                           style: TextStyle(
-                            fontSize: 60,
-                            fontWeight: FontWeight.bold,
-                            height: 1.2,
-                            color: AppColors.kColor
-                          ),
+                              fontSize: 60,
+                              fontWeight: FontWeight.bold,
+                              height: 1.2,
+                              color: AppColors.kColor),
                         ),
                         SizedBox(height: 16),
                         Text(
