@@ -19,7 +19,7 @@ We are using Flutter for the mobile app and Python for the server.
 - Shakeel Khalid
 - Ali Raza
 - Yaseen
-- Salman Ahmed
+- Salman Ahmad
 
 # usage
 - signtalk: flutter run
