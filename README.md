@@ -1,3 +1,4 @@
+![alt text](signtalk/assets/images/1.png)
 # Title: SignTalk
 # Description: A Flutter app to convert speech, audio and text into sign language.
 
