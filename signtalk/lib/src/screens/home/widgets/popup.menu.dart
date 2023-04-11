@@ -7,9 +7,9 @@ import 'package:signtalk/src/models/transcript.dart';
 import 'package:signtalk/src/constants/globals/index.dart' as globals;
 
 class CustomPopupMenu extends StatefulWidget {
-  final Function(String) setMethodOfTranscript;
+  const CustomPopupMenu({super.key, required this.setMethodOfTranscript});
 
-  CustomPopupMenu({super.key, required this.setMethodOfTranscript});
+  final Function(String) setMethodOfTranscript;
 
   @override
   State<CustomPopupMenu> createState() => _CustomPopupMenuState();
@@ -22,8 +22,8 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
   final List<Widget> aboutBoxChildren = <Widget>[
     const SizedBox(height: 24),
     RichText(
-      text: TextSpan(
-        children: <TextSpan>[
+      text: const TextSpan(
+        children: [
           TextSpan(
               style: TextStyle(color: AppColors.blackColor),
               text:
@@ -47,25 +47,28 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Youtube Video URL'),
+            title: const Text('Youtube Video URL'),
             content: TextField(
               controller: _controller,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Enter Youtube Video URL',
               ),
             ),
             actions: [
-              Text(
+              const Text(
                 "This process can take a while",
                 style: TextStyle(color: AppColors.redColor),
               ),
               ElevatedButton(
-                child: Text('Load'),
+                child: const Text('Load'),
                 onPressed: () {
                   setState(() {
                     globals.transcript = Transcript(text: _controller.text);
+                    globals.transcriptMethod = "Youtube";
                   });
+
                   widget.setMethodOfTranscript("Youtube");
+                  _controller.clear();
                   Navigator.of(context).pop();
                 },
               ),
@@ -85,41 +88,43 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
         PopupMenuItem<Options>(
           value: Options.file,
           child: ListTile(
-            leading: FaIcon(
+            leading: const FaIcon(
               FontAwesomeIcons.fileImport,
               color: AppColors.kColor,
             ),
-            title: Text("Upload File"),
+            title: const Text("Upload File"),
             onTap: () => widget.setMethodOfTranscript("File"),
           ),
         ),
         PopupMenuItem<Options>(
           value: Options.url,
           child: ListTile(
-            leading: FaIcon(FontAwesomeIcons.youtube, color: AppColors.kColor),
-            title: Text("Load Youtube Video"),
+            leading:
+                const FaIcon(FontAwesomeIcons.youtube, color: AppColors.kColor),
+            title: const Text("Load Youtube Video"),
             onTap: dialog,
           ),
         ),
         PopupMenuItem<Options>(
           value: Options.help,
           child: ListTile(
-            leading:
-                FaIcon(FontAwesomeIcons.solidCircleQuestion, color: AppColors.kColor),
-            title: Text("Help"),
+            leading: const FaIcon(FontAwesomeIcons.solidCircleQuestion,
+                color: AppColors.kColor),
+            title: const Text("Help"),
             onTap: () {},
           ),
         ),
         PopupMenuItem<Options>(
           value: Options.about,
           child: ListTile(
-            leading: FaIcon(FontAwesomeIcons.circleInfo, color: AppColors.kColor),
-            title: Text("About"),
+            leading: const FaIcon(FontAwesomeIcons.circleInfo,
+                color: AppColors.kColor),
+            title: const Text("About"),
             onTap: () {
               showAboutDialog(
                 context: context,
                 children: aboutBoxChildren,
-                applicationIcon: ImageIcon(
+                applicationIcon: const ImageIcon(
                   AssetImage('assets/images/2.png'),
                 ),
                 applicationName: 'Sign Talk',

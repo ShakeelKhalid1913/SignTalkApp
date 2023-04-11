@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 class Api {
   //mobile:    http://192.168.0.100:8000 should be the ip of the computer running the server
   //emulator:  http://10.0.2.2:8000
-  static final String url = "http://192.168.0.100:8000";
+  static final String url = "http://10.0.2.2:8000";
   static final String audio2text = "$url/audio";
   static final String youtube2text = "$url/youtube";
 

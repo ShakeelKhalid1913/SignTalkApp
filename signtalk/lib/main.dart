@@ -5,7 +5,7 @@ import 'package:signtalk/src/screens/onboarding/index.dart';
 import 'package:signtalk/src/utils/routes.dart';
 
 void main(List<String> args) {
-  runApp(SignTalkApp());
+  runApp(const SignTalkApp());
 }
 
 class SignTalkApp extends StatelessWidget {
@@ -21,8 +21,8 @@ class SignTalkApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       initialRoute: '/',
       routes: {
-        Routes.onBoardingScreen: (_) => OnBoardingScreen(),
-        Routes.homeScreen: (_) => HomeScreen(),
+        Routes.onBoardingScreen: (_) => const OnBoardingScreen(),
+        Routes.homeScreen: (_) => const HomeScreen(),
       },
     );
   }

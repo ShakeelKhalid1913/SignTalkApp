@@ -16,10 +16,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _inputController = TextEditingController();
   final AudioRecorder _audioRecorder = AudioRecorder();
-  String _statusText = "";
   String _method = "None";
 
-  void setStatusText(String value) => setState(() => _statusText = value);
   void setMethodOfTranscript(String val) => setState(() => _method = val);
 
   @override
@@ -27,10 +25,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text("Sign Talk"),
+        title: const Text("Sign Talk"),
         automaticallyImplyLeading: false,
         actions: [
-          CustomPopupMenu(setMethodOfTranscript: setMethodOfTranscript)
+          CustomPopupMenu(
+            setMethodOfTranscript: setMethodOfTranscript
+            )
         ],
       ),
       body: Container(
@@ -41,18 +41,16 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             TextMicInputWidget(
               inputController: _inputController,
-              setStatusText: setStatusText,
               setMethodOfTranscript: setMethodOfTranscript,
               audioRecorder: _audioRecorder,
             ),
-            Character(),
+            const Character(),
             if (_method != "None")
               TranscribeTextBuilder(
                 method: _method,
                 audioRecorder: _audioRecorder,
                 setMethodOfTranscript: setMethodOfTranscript,
               ),
-            Text(_statusText)
             // Character()
           ],
         ),

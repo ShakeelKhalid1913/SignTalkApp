@@ -7,81 +7,72 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:signtalk/src/constants/colors.dart';
 
 import '../../../config/services/audio_recorder.dart';
+import '../../../constants/globals/index.dart' as globals;
 
 class TextMicInputWidget extends StatefulWidget {
-  final TextEditingController inputController;
-  final Function(String) setStatusText;
-  final Function(String) setMethodOfTranscript;
-  final AudioRecorder audioRecorder;
-
-  TextMicInputWidget(
+  const TextMicInputWidget(
       {super.key,
       required this.inputController,
-      required this.setStatusText,
       required this.setMethodOfTranscript,
       required this.audioRecorder});
+
+  final TextEditingController inputController;
+  final Function(String) setMethodOfTranscript;
+  final AudioRecorder audioRecorder;
 
   @override
   State<TextMicInputWidget> createState() => _TextMicInputWidget();
 }
 
 class _TextMicInputWidget extends State<TextMicInputWidget> {
-  Timer? _timer;
   String mode = "mic";
   bool _isRecording = false;
+  Stopwatch _stopwatch = Stopwatch();
 
   void _startRecording() async {
     if (await widget.audioRecorder.checkPermission()) {
+      Fluttertoast.showToast(
+        msg: 'Recording....',
+      );
+      setState(() => _isRecording = true);
+      _stopwatch = Stopwatch();
+      _stopwatch.start();
       widget.audioRecorder.startRecord();
-      setState(() {
-        _isRecording = true;
-      });
-      widget.setStatusText("Recording");
     } else
-      widget.setStatusText("Permission not granted");
+      Fluttertoast.showToast(
+        msg: 'Permission not granted',
+      );
   }
 
   void _stopRecording() async {
+    setState(() => _isRecording = false);
     widget.audioRecorder.stopRecord();
-    await Future.delayed(Duration(milliseconds: 1000));
-    widget.setMethodOfTranscript("Mic");
-    setState(() {
-      _isRecording = false;
-    });
-    widget.setStatusText("Recording stopped");
-  }
-
-  void changeMode() {
-    setState(() {
-      mode = widget.inputController.text.isNotEmpty ? "text" : "mic";
-    });
-  }
-
-  void _onLongPressStart(LongPressStartDetails details) {
-    _timer = Timer(Duration(seconds: 3), () {
-      _timer = null;
-      _startRecording();
-    });
-  }
-
-  void _onLongPressEnd(LongPressEndDetails details) {
-    if (_timer != null) {
-      _timer?.cancel();
-      _timer = null;
-
+    _stopwatch.stop();
+    var timeElapsedInSeconds = _stopwatch.elapsed.inSeconds;
+    if (timeElapsedInSeconds >= 3) {
+      await Future.delayed(const Duration(milliseconds: 1000));
+      widget.setMethodOfTranscript("Mic");
+      setState(() {
+        globals.transcriptMethod = "Mic";
+      });
+      Fluttertoast.showToast(
+        msg: 'Recording stopped.',
+      );
+    } else {
       Fluttertoast.showToast(
         msg: 'Please hold the button for at least 3 seconds.',
       );
-    } else {
-      _stopRecording();
     }
   }
+
+  void changeMode() => setState(
+      () => mode = widget.inputController.text.isNotEmpty ? "text" : "mic");
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 50,
-      margin: EdgeInsets.fromLTRB(5, 5, 5, 10),
+      margin: const EdgeInsets.fromLTRB(5, 5, 5, 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -94,26 +85,26 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
               child: TextField(
                 controller: widget.inputController,
                 maxLines: 1,
-                cursorColor: Color(0xFF13F5B2),
+                cursorColor: AppColors.greenColor,
                 style: GoogleFonts.quicksand(
                   fontWeight: FontWeight.w500,
-                  color: Color(0xFF302E5B),
+                  color: AppColors.kColor,
                 ),
                 decoration: InputDecoration(
                   hintText: 'Enter Text to translate',
                   hintStyle: GoogleFonts.quicksand(
-                    color: Color(0xFF9B9BA6),
+                    color: AppColors.greyTextColor,
                     fontWeight: FontWeight.w500,
                   ),
                   border: InputBorder.none,
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  contentPadding: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 16.0),
                 ),
                 onChanged: (value) => changeMode(),
               ),
             ),
           ),
-          Padding(padding: EdgeInsets.fromLTRB(0, 5, 5, 0)),
+          const Padding(padding: EdgeInsets.fromLTRB(0, 5, 5, 0)),
           mode == "text"
               ? FloatingActionButton(
                   onPressed: () {},
@@ -126,14 +117,15 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
                       color: AppColors.kColor,
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: FaIcon(
+                    child: const FaIcon(
                       FontAwesomeIcons.solidPaperPlane,
                       color: AppColors.whiteColor,
                     ),
                   ))
               : GestureDetector(
-                  onLongPressStart: _onLongPressStart,
-                  onLongPressEnd: _onLongPressEnd,
+                  onTapDown: (details) => _startRecording(),
+                  onTapUp: (details) => _stopRecording(),
+                  onTapCancel: () => _stopRecording(),
                   child: Container(
                     height: 56,
                     width: 56,
@@ -142,11 +134,11 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
                       color: AppColors.kColor,
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: _isRecording
-                        ? FaIcon(FontAwesomeIcons.stop,
-                            color: AppColors.whiteColor)
-                        : FaIcon(FontAwesomeIcons.microphone,
-                            color: AppColors.whiteColor),
+                    child: FaIcon(
+                        _isRecording
+                            ? FontAwesomeIcons.stop
+                            : FontAwesomeIcons.microphone,
+                        color: AppColors.whiteColor),
                   ),
                 ),
         ],

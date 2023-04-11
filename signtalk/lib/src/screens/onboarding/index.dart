@@ -17,8 +17,6 @@ class OnBoardingScreen extends StatefulWidget {
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   late RiveAnimationController _btnAnimationController;
 
-  bool isShowSignInDialog = false;
-
   @override
   void initState() {
     _btnAnimationController = OneShotAnimation(
@@ -57,7 +55,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           ),
         ),
         AnimatedPositioned(
-          top: isShowSignInDialog ? -50 : 0,
+          top: 0,
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           duration: const Duration(milliseconds: 260),
@@ -96,19 +94,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       Future.delayed(
                         const Duration(milliseconds: 800),
                         () {
-                          setState(() {
-                            isShowSignInDialog = true;
-                          });
-                          //navigate to home screen
                           Navigator.pushNamed(context, Routes.homeScreen);
                         },
                       );
                     },
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 24),
+                    padding: const EdgeInsets.symmetric(vertical: 24),
                     child: RichText(
-                        text: TextSpan(
+                        text: const TextSpan(
                             style: TextStyle(
                               color: AppColors.blackColor,
                               fontSize: 14,

@@ -8,17 +8,15 @@ import '../../../constants/globals/index.dart' as globals;
 
 // ignore: must_be_immutable
 class TranscribeTextBuilder extends StatefulWidget {
-  final AudioRecorder _audioRecorder;
-  final String _method;
-  final Function(String) setMethodOfTranscript;
-
-  TranscribeTextBuilder(
+  const TranscribeTextBuilder(
       {super.key,
-      required AudioRecorder audioRecorder,
-      required String method,
-      required this.setMethodOfTranscript})
-      : _audioRecorder = audioRecorder,
-        _method = method;
+      required this.audioRecorder,
+      required this.method,
+      required this.setMethodOfTranscript});
+
+  final AudioRecorder audioRecorder;
+  final String method;
+  final Function(String) setMethodOfTranscript;
 
   @override
   State<TranscribeTextBuilder> createState() => _TranscribeTextBuilderState();
@@ -28,7 +26,7 @@ class _TranscribeTextBuilderState extends State<TranscribeTextBuilder> {
   Future<String> transcript(String method) async {
     print(method);
     if (method == "Mic") {
-      return globals.transcriptFile(widget._audioRecorder.recordFilePath);
+      return globals.transcriptFile(widget.audioRecorder.recordFilePath);
     } else if (method == "File") {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         allowedExtensions: ['wav', 'mp3', 'm4a', 'mp4'],
@@ -41,7 +39,7 @@ class _TranscribeTextBuilderState extends State<TranscribeTextBuilder> {
         return "File did not pick";
     } else if (method == "Youtube") {
       print(globals.transcript.text);
-      return globals.transcriptYoutubeVideo("https://youtu.be/ZDQDWLhfsEY");
+      return globals.transcriptYoutubeVideo(globals.transcript.text);
     } else
       return "Error in transcripting file";
   }
@@ -49,7 +47,7 @@ class _TranscribeTextBuilderState extends State<TranscribeTextBuilder> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String>(
-      future: transcript(widget._method),
+      future: transcript(widget.method),
       builder: (context, snapshot) {
         List<Widget> children;
         if (snapshot.connectionState == ConnectionState.done) {
@@ -57,10 +55,13 @@ class _TranscribeTextBuilderState extends State<TranscribeTextBuilder> {
             children = [Text('Error: ${snapshot.error}')];
           } else {
             final responseText = snapshot.data ?? "";
-            children = [Text(responseText)];
+            children = [
+              SingleChildScrollView(
+                  child: SizedBox(height: 100, child: Text(responseText)))
+            ];
           }
         } else {
-          children = [
+          children = const [
             SizedBox(
               child: CircularProgressIndicator(),
             ),

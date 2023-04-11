@@ -44,8 +44,9 @@ def audio_to_text(filename):
 
         output = response.json()
         transcript = transcript + output['text']
+        print(f"{subpart} done")
 
-    # os.remove(filename)
+    os.remove(filename)
     for subpart in subparts:
         os.remove(subpart)
 
@@ -69,7 +70,7 @@ def transcript_video(url):
 
 # for testing purpose
 if __name__ == "__main__":
-    # print(transcript_video('https://youtu.be/lMvFWKHhVZ0'))
+    # print(transcript_video('https://youtu.be/UOkOA6W-vwc'))
     filename = "vocal-spoken-the-realm-female-speech_75bpm_C_major.wav"
 
     output = audio_to_text(filename)

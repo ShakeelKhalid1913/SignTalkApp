@@ -15,15 +15,17 @@ def index():
 @app.post('/audio')
 async def audio(file: UploadFile = File()):
     contents = await file.read()
-    with open("audio.mp3", "wb") as f:
+    # get extension of file
+    ext = file.filename.split('.')[-1]
+    filename = f"audio.{ext}"
+    with open(filename, "wb") as f:
         f.write(contents)
-    text = audio_to_text("audio.mp3")
+    text = audio_to_text(filename)
     print(text)
     return {"text": text}
 
 @app.post('/youtube')
 async def youtube(transcript: Transcript):
-    print(transcript.dict())
     text = transcript_video(transcript.youtube_url)
     return {"text": text}
 

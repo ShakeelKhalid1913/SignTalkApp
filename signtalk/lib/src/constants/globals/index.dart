@@ -4,6 +4,7 @@ import 'package:signtalk/src/models/transcript.dart';
 import '../../config/api/index.dart';
 
 Transcript transcript = Transcript(text: '');
+String transcriptMethod = "None";
 
 Future<String> transcriptFile(String path) async {
   String fileName = basename(path);
