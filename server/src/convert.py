@@ -4,8 +4,11 @@ import requests
 import subprocess
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
+# from deta import Deta, Drive
 
-from glossary import clean_sentence
+# drive = Drive("drive")
+
+# from src.glossary import clean_sentence
 
 API_URL = "https://api-inference.huggingface.co/models/openai/whisper-base"
 TOKEN = "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"
@@ -49,6 +52,10 @@ def audio_to_text(filename):
     os.remove(filename)
     for subpart in subparts:
         os.remove(subpart)
+    # with open(drive.get(filename), "rb") as f:
+    #     data = f.read()
+    # response = requests.post(API_URL, headers=headers, data=data)
+    # transcript = response.json()['text']
 
     return transcript
 
@@ -61,22 +68,25 @@ def transcript_video(url):
     if match:
         print('transcripting video...')
         video_id = match.group(1)
-        transcript =  YouTubeTranscriptApi.get_transcript(video_id, languages=['en'])
-        formatter = TextFormatter()
+        try:
+            transcript =  YouTubeTranscriptApi.get_transcript(video_id, languages=['en'])
+            formatter = TextFormatter()
 
-        return formatter.format_transcript(transcript).replace('\n', ' ')
+            return formatter.format_transcript(transcript).replace('\n', ' ')
+        except:
+            return "Transcript is not available for this video."
     else:
         return 'Invalid youtube video link..'
 
 # for testing purpose
 if __name__ == "__main__":
-    # print(transcript_video('https://youtu.be/UOkOA6W-vwc'))
-    filename = "vocal-spoken-the-realm-female-speech_75bpm_C_major.wav"
+    print(transcript_video('https://youtu.be/UOkOA6W-vwc'))
+    # filename = "vocal-spoken-the-realm-female-speech_75bpm_C_major.wav"
 
-    output = audio_to_text(filename)
+    # output = audio_to_text(filename)
 
-    print(output)
+    # print(output)
 
-    print("=" * 50)
-    print("Output after cleaning:")
-    print(clean_sentence(output))
+    # print("=" * 50)
+    # print("Output after cleaning:")
+    # print(clean_sentence(output))

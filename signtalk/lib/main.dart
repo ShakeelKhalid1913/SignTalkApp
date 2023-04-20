@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:signtalk/src/constants/theme.dart';
 import 'package:signtalk/src/screens/home/index.dart';
 import 'package:signtalk/src/screens/onboarding/index.dart';
+import 'package:signtalk/src/screens/video_play/index.dart';
 import 'package:signtalk/src/utils/routes.dart';
 
 void main(List<String> args) {
@@ -23,6 +24,7 @@ class SignTalkApp extends StatelessWidget {
       routes: {
         Routes.onBoardingScreen: (_) => const OnBoardingScreen(),
         Routes.homeScreen: (_) => const HomeScreen(),
+        Routes.videoPlayerScreen: (_) => const VideoPlayerScreen(),
       },
     );
   }

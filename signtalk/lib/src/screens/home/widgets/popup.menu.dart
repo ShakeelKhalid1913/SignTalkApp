@@ -6,6 +6,8 @@ import 'package:signtalk/src/models/transcript.dart';
 
 import 'package:signtalk/src/constants/globals/index.dart' as globals;
 
+import '../../../utils/routes.dart';
+
 class CustomPopupMenu extends StatefulWidget {
   const CustomPopupMenu({super.key, required this.setMethodOfTranscript});
 
@@ -69,7 +71,8 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
 
                   widget.setMethodOfTranscript("Youtube");
                   _controller.clear();
-                  Navigator.of(context).pop();
+                  // Navigator.of(context).pop();
+                  Navigator.pushNamed(context, Routes.videoPlayerScreen);
                 },
               ),
             ],
@@ -81,9 +84,7 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
   Widget build(BuildContext context) {
     return PopupMenuButton(
       initialValue: _selectedOption,
-      onSelected: (Options option) {
-        setState(() => _selectedOption = option);
-      },
+      onSelected: (Options option) => setState(() => _selectedOption = option),
       itemBuilder: (context) => <PopupMenuEntry<Options>>[
         PopupMenuItem<Options>(
           value: Options.file,

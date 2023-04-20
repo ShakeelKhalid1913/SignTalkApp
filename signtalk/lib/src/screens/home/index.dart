@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:signtalk/src/screens/home/widgets/character.widget.dart';
+import 'package:signtalk/src/widgets/character.widget.dart';
 import 'package:signtalk/src/screens/home/widgets/popup.menu.dart';
 import 'package:signtalk/src/screens/home/widgets/text_mic.input.dart';
 import 'package:signtalk/src/screens/home/widgets/transcribe_text.builder.dart';
@@ -34,10 +34,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: Container(
-        color: AppColors.whiteColor,
+        padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
         child: Column(
           verticalDirection: VerticalDirection.up,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             TextMicInputWidget(
               inputController: _inputController,
@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 audioRecorder: _audioRecorder,
                 setMethodOfTranscript: setMethodOfTranscript,
               ),
-            // Character()
+            
           ],
         ),
       ),

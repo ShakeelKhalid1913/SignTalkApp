@@ -24,7 +24,7 @@ class TranscribeTextBuilder extends StatefulWidget {
 
 class _TranscribeTextBuilderState extends State<TranscribeTextBuilder> {
   Future<String> transcript(String method) async {
-    print(method);
+    debugPrint(method);
     if (method == "Mic") {
       return globals.transcriptFile(widget.audioRecorder.recordFilePath);
     } else if (method == "File") {
@@ -57,7 +57,7 @@ class _TranscribeTextBuilderState extends State<TranscribeTextBuilder> {
             final responseText = snapshot.data ?? "";
             children = [
               SingleChildScrollView(
-                  child: SizedBox(height: 100, child: Text(responseText)))
+                  child: SizedBox(height: 280, child: Text(responseText)))
             ];
           }
         } else {

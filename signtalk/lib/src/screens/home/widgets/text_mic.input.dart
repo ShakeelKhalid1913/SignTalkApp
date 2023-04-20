@@ -49,6 +49,7 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
     widget.audioRecorder.stopRecord();
     _stopwatch.stop();
     var timeElapsedInSeconds = _stopwatch.elapsed.inSeconds;
+    debugPrint(timeElapsedInSeconds.toString());
     if (timeElapsedInSeconds >= 3) {
       await Future.delayed(const Duration(milliseconds: 1000));
       widget.setMethodOfTranscript("Mic");

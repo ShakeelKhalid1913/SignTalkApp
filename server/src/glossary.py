@@ -3,7 +3,7 @@ from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 import contractions
 
-from syn import synonyms
+from src.syn import synonyms
 
 # nltk.download('punkt')
 # nltk.download('stopwords')

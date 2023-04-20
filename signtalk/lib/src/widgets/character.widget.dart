@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
 
-import '../../../constants/colors.dart';
+import '../constants/colors.dart';
 
 // ignore: must_be_immutable
 class Character extends StatelessWidget {
@@ -10,7 +10,7 @@ class Character extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 550.0,
+      height: 370.0,
       child: ModelViewer(
         backgroundColor: AppColors.whiteColor,
         src: 'assets/character/character.glb', // a bundled asset file

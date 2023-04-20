@@ -1,6 +1,9 @@
 from fastapi import FastAPI, File, UploadFile
 from pydantic import BaseModel
-from convert import audio_to_text, transcript_video
+from src.convert import audio_to_text, transcript_video
+# from deta import Deta, Drive
+
+# drive = Drive("drive")
 
 class Transcript(BaseModel):
     youtube_url: str
@@ -17,9 +20,10 @@ async def audio(file: UploadFile = File()):
     contents = await file.read()
     # get extension of file
     ext = file.filename.split('.')[-1]
-    filename = f"audio.{ext}"
+    filename = file.filename
     with open(filename, "wb") as f:
         f.write(contents)
+    # drive.put(filename, contents, content_type=file.content_type)
     text = audio_to_text(filename)
     print(text)
     return {"text": text}
