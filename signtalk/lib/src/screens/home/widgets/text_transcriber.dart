@@ -3,11 +3,9 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:signtalk/src/config/services/audio_recorder.dart';
+import 'package:signtalk/src/constants/globals/index.dart' as globals;
 
-import '../../../constants/globals/index.dart' as globals;
-
-// ignore: must_be_immutable
-class TranscribeTextBuilder extends StatefulWidget {
+class TranscribeTextBuilder extends StatelessWidget {
   const TranscribeTextBuilder(
       {super.key,
       required this.audioRecorder,
@@ -18,15 +16,10 @@ class TranscribeTextBuilder extends StatefulWidget {
   final String method;
   final Function(String) setMethodOfTranscript;
 
-  @override
-  State<TranscribeTextBuilder> createState() => _TranscribeTextBuilderState();
-}
-
-class _TranscribeTextBuilderState extends State<TranscribeTextBuilder> {
   Future<String> transcript(String method) async {
     debugPrint(method);
     if (method == "Mic") {
-      return globals.transcriptFile(widget.audioRecorder.recordFilePath);
+      return globals.transcriptFile(audioRecorder.recordFilePath);
     } else if (method == "File") {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         allowedExtensions: ['wav', 'mp3', 'm4a', 'mp4'],
@@ -47,7 +40,7 @@ class _TranscribeTextBuilderState extends State<TranscribeTextBuilder> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String>(
-      future: transcript(widget.method),
+      future: transcript(method),
       builder: (context, snapshot) {
         List<Widget> children;
         if (snapshot.connectionState == ConnectionState.done) {

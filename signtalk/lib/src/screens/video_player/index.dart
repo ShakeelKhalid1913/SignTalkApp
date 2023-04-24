@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:signtalk/src/widgets/character.widget.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../../widgets/character.widget.dart';
-
 class VideoPlayerScreen extends StatefulWidget {
-  const VideoPlayerScreen({super.key});
+  const VideoPlayerScreen({super.key, required this.videoUrl});
+
+  final String videoUrl;
 
   @override
   State<VideoPlayerScreen> createState() => _VideoPlayerScreenState();
 }
 
 class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
-  final videoUrl = "https://youtu.be/UOkOA6W-vwc";
   late YoutubePlayerController _controller;
 
   @override
   void initState() {
-    final videoID = YoutubePlayer.convertUrlToId(videoUrl);
+    final videoID = YoutubePlayer.convertUrlToId(widget.videoUrl);
 
     _controller = YoutubePlayerController(
         initialVideoId: videoID!,

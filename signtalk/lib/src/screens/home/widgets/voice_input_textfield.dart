@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:signtalk/src/config/services/audio_recorder.dart';
 import 'package:signtalk/src/constants/colors.dart';
-
-import '../../../config/services/audio_recorder.dart';
-import '../../../constants/globals/index.dart' as globals;
+import 'package:signtalk/src/constants/globals/index.dart' as globals;
+import 'package:signtalk/src/screens/home/widgets/send_button.dart';
+import 'package:signtalk/src/screens/home/widgets/text_input.dart';
 
 class TextMicInputWidget extends StatefulWidget {
   const TextMicInputWidget(
@@ -28,6 +28,7 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
   String mode = "mic";
   bool _isRecording = false;
   Stopwatch _stopwatch = Stopwatch();
+  final GlobalKey _tooltipKey = GlobalKey();
 
   void _startRecording() async {
     if (await widget.audioRecorder.checkPermission()) {
@@ -50,7 +51,7 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
     _stopwatch.stop();
     var timeElapsedInSeconds = _stopwatch.elapsed.inSeconds;
     debugPrint(timeElapsedInSeconds.toString());
-    if (timeElapsedInSeconds >= 3) {
+    if (timeElapsedInSeconds >= globals.minRecordingTime) {
       await Future.delayed(const Duration(milliseconds: 1000));
       widget.setMethodOfTranscript("Mic");
       setState(() {
@@ -61,7 +62,7 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
       );
     } else {
       Fluttertoast.showToast(
-        msg: 'Please hold the button for at least 3 seconds.',
+        msg: 'Please hold the button for at least ${globals.minRecordingTime} seconds.',
       );
     }
   }
@@ -77,56 +78,20 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.whiteColor.withOpacity(0.5),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: TextField(
-                controller: widget.inputController,
-                maxLines: 1,
-                cursorColor: AppColors.greenColor,
-                style: GoogleFonts.quicksand(
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.kColor,
-                ),
-                decoration: InputDecoration(
-                  hintText: 'Enter Text to translate',
-                  hintStyle: GoogleFonts.quicksand(
-                    color: AppColors.greyTextColor,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(
-                      vertical: 8.0, horizontal: 16.0),
-                ),
-                onChanged: (value) => changeMode(),
-              ),
-            ),
+          TextInput(
+            inputController: widget.inputController,
+            changeMode: changeMode,
           ),
           const Padding(padding: EdgeInsets.fromLTRB(0, 5, 5, 0)),
           mode == "text"
-              ? FloatingActionButton(
-                  onPressed: () {},
-                  backgroundColor: AppColors.kColor,
-                  child: Container(
-                    height: 56,
-                    width: 56,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: AppColors.kColor,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: const FaIcon(
-                      FontAwesomeIcons.solidPaperPlane,
-                      color: AppColors.whiteColor,
-                    ),
-                  ))
+              ? const SendButton()
               : GestureDetector(
-                  onTapDown: (details) => _startRecording(),
-                  onTapUp: (details) => _stopRecording(),
-                  onTapCancel: () => _stopRecording(),
+                  onLongPressStart: (details) => _startRecording(),
+                  onLongPressEnd: (details) => _stopRecording(),
+                  onTap: (){
+                    dynamic toolTip = _tooltipKey.currentState;
+                    toolTip.ensureTooltipVisible();
+                  },
                   child: Container(
                     height: 56,
                     width: 56,
@@ -135,11 +100,21 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
                       color: AppColors.kColor,
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: FaIcon(
-                        _isRecording
-                            ? FontAwesomeIcons.stop
-                            : FontAwesomeIcons.microphone,
-                        color: AppColors.whiteColor),
+                    child: Tooltip(
+                      margin: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: AppColors.kColor,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      key: _tooltipKey,
+                      triggerMode: TooltipTriggerMode.tap,
+                      message: "Hold to record, release to stop",
+                      child: FaIcon(
+                          _isRecording
+                              ? FontAwesomeIcons.stop
+                              : FontAwesomeIcons.microphone,
+                          color: AppColors.whiteColor),
+                    ),
                   ),
                 ),
         ],

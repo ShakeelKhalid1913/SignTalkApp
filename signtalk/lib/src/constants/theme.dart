@@ -16,7 +16,7 @@ class Themes {
               fontWeight: FontWeight.bold,
               fontSize: 35,
               fontFamily: GoogleFonts.quicksand().fontFamily),
-          iconTheme: IconThemeData(color: AppColors.kColor)));
+          iconTheme: const IconThemeData(color: AppColors.kColor)));
 
   static ThemeData darkTheme(context) => ThemeData(
         brightness: Brightness.dark,

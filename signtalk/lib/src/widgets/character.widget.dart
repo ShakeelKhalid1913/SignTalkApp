@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
+import 'package:signtalk/src/constants/colors.dart';
 
-import '../constants/colors.dart';
-
-// ignore: must_be_immutable
 class Character extends StatelessWidget {
   const Character({super.key});
 

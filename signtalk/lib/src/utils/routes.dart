@@ -1,5 +1,5 @@
 class Routes {
-  static String onBoardingScreen = "/";
-  static String homeScreen = "/home";
-  static String videoPlayerScreen = "/video_play";
+  static const String onBoardingScreen = "/";
+  static const String homeScreen = "/home";
+  static const String videoPlayerScreen = "/video_play";
 }

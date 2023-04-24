@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:signtalk/src/widgets/character.widget.dart';
-import 'package:signtalk/src/screens/home/widgets/popup.menu.dart';
-import 'package:signtalk/src/screens/home/widgets/text_mic.input.dart';
-import 'package:signtalk/src/screens/home/widgets/transcribe_text.builder.dart';
+import 'package:signtalk/src/screens/home/widgets/popup_menu.dart';
+import 'package:signtalk/src/screens/home/widgets/voice_input_textfield.dart';
+import 'package:signtalk/src/screens/home/widgets/text_transcriber.dart';
 import '../../config/services/audio_recorder.dart';
-import '../../constants/colors.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -51,11 +50,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 audioRecorder: _audioRecorder,
                 setMethodOfTranscript: setMethodOfTranscript,
               ),
-            
           ],
         ),
       ),
-      //drawer: AppDrawer()
     );
   }
 }

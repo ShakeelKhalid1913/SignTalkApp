@@ -3,10 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:signtalk/src/constants/colors.dart';
 import 'package:signtalk/src/models/enums/options.dart';
 import 'package:signtalk/src/models/transcript.dart';
-
 import 'package:signtalk/src/constants/globals/index.dart' as globals;
-
-import '../../../utils/routes.dart';
+import 'package:signtalk/src/screens/video_player/index.dart';
 
 class CustomPopupMenu extends StatefulWidget {
   const CustomPopupMenu({super.key, required this.setMethodOfTranscript});
@@ -23,25 +21,12 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
 
   final List<Widget> aboutBoxChildren = <Widget>[
     const SizedBox(height: 24),
-    RichText(
-      text: const TextSpan(
-        children: [
-          TextSpan(
-              style: TextStyle(color: AppColors.blackColor),
-              text:
-                  "We are team of deveolpers who have created this app to help "
-                  "to communicate with the people who are deaf and hard of hearing. "
-                  "We are dedicated to creating high-quality mobile applications that "
-                  "make your life "
-                  "easier. Our apps are designed with a focus on usability, "
-                  "performance, and user experience."),
-          TextSpan(
-              text: 'www.signtalk.com',
-              style: TextStyle(color: AppColors.kColor)),
-          TextSpan(text: '.', style: TextStyle(color: AppColors.blackColor)),
-        ],
-      ),
-    ),
+    const Text("We are team of deveolpers who have created this app to help "
+        "to communicate with the people who are deaf and hard of hearing. "
+        "We are dedicated to creating high-quality mobile applications that "
+        "make your life "
+        "easier. Our apps are designed with a focus on usability, "
+        "performance, and user experience.")
   ];
 
   Future<dynamic> dialog() {
@@ -70,9 +55,17 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
                   });
 
                   widget.setMethodOfTranscript("Youtube");
-                  _controller.clear();
+                  // _controller.clear();
+                  debugPrint("Youtube Video URL: ${_controller.text}");
                   // Navigator.of(context).pop();
-                  Navigator.pushNamed(context, Routes.videoPlayerScreen);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => VideoPlayerScreen(
+                        videoUrl: _controller.text,
+                      ),
+                    ),
+                  );
                 },
               ),
             ],
@@ -130,7 +123,7 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
                 ),
                 applicationName: 'Sign Talk',
                 applicationVersion: '1.0.0',
-                applicationLegalese: '© 2023 Company',
+                applicationLegalese: '2023 Company',
               );
             },
           ),
