@@ -11,6 +11,7 @@ class Transcript(BaseModel):
         youtube_url (str): The URL of the YouTube
         video for which the transcript is available.
     """
+
     youtube_url: str
 
 
@@ -22,6 +23,7 @@ class Text(BaseModel):
         glossary (str): A string containing a
         glossary of terms used in the text.
     """
+
     glossary: str
 
 
