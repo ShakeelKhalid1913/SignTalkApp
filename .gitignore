@@ -1,1 +1,7 @@
 /.idea
+/signtalk/.idea
+/signtalk/.dart_tool
+/server/__pycache__
+/server/.venv
+/server/src/__pycache__
+/server/src/api/__pycache__
