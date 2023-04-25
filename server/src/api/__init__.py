@@ -11,8 +11,10 @@ TOKEN = "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"
 
 headers = {"Authorization": f"Bearer {TOKEN}"}
 
+
 def generate_glossary(text):
     return clean_sentence(text)
+
 
 def transcribe_media(filename):
     transcript = ""
@@ -49,6 +51,7 @@ def transcribe_media(filename):
 
     return transcript
 
+
 def transcribe_youtube(url):
     # get id of youtube video from url
     print('checking if url is valid...')
@@ -59,14 +62,15 @@ def transcribe_youtube(url):
         print('transcripting video...')
         video_id = match.group(1)
         try:
-            transcript =  YouTubeTranscriptApi.get_transcript(video_id, languages=['en'])
+            transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=['en'])
             formatter = TextFormatter()
 
             return formatter.format_transcript(transcript).replace('\n', ' ')
-        except:
+        except Exception as e:
             return "Transcript is not available for this video."
     else:
         return 'Invalid youtube video link..'
+
 
 # for testing purpose
 if __name__ == "__main__":
