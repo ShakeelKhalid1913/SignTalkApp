@@ -37,7 +37,8 @@ def clean_sentence(sentence):
 
 
 def get_duration(filename):
-    command = ['ffprobe', '-i', filename, '-show_entries', 'format=duration', '-v', 'quiet', '-of', 'csv=p=0']
+    command = ['ffprobe', '-i', filename, '-show_entries',
+               'format=duration', '-v', 'quiet', '-of', 'csv=p=0']
     output = subprocess.check_output(command)
     return float(output)
 

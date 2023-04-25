@@ -4,7 +4,8 @@ import requests
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
 
-from src.api.helper_functions import clean_sentence, convert_to_audio, get_duration, split_file_subparts
+from src.api.helper_functions import clean_sentence, \
+    convert_to_audio, get_duration, split_file_subparts
 
 API_URL = "https://api-inference.huggingface.co/models/openai/whisper-base"
 TOKEN = "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"
@@ -32,7 +33,8 @@ def transcribe_media(filename):
     duration = get_duration(filename)
     split_file_subparts(filename, subpart_duration, ext)
 
-    subparts = [f'temp/media_{i:03d}.{ext}' for i in range(int(duration / subpart_duration) + 1)]
+    subparts = [f'temp/media_{i:03d}.{ext}'
+                for i in range(int(duration / subpart_duration) + 1)]
 
     for subpart in subparts:
         if get_duration(subpart) < 2:
@@ -55,7 +57,8 @@ def transcribe_media(filename):
 def transcribe_youtube(url):
     # get id of youtube video from url
     print('checking if url is valid...')
-    pattern = re.compile(r'(?:https://)?(?:www\.)?(?:youtube\.com/watch\?v=|youtu\.be/)([\w-]+)')
+    pattern = re.compile(
+        r'(?:https://)?(?:www\.)?(?:youtube\.com/watch\?v=|youtu\.be/)([\w-]+)')
     match = pattern.search(url)
 
     if match:
