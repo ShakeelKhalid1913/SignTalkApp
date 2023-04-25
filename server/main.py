@@ -3,9 +3,21 @@ from pydantic import BaseModel
 from src.api import *
 
 class Transcript(BaseModel):
+    """
+    Represents a YouTube video transcript.
+
+    Attributes:
+        youtube_url (str): The URL of the YouTube video for which the transcript is available.
+    """
     youtube_url: str
 
 class Text(BaseModel):
+    """
+    Represents a piece of text with a glossary of terms.
+
+    Attributes:
+        glossary (str): A string containing a glossary of terms used in the text.
+    """
     glossary: str
 
 app = FastAPI()
