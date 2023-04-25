@@ -31,8 +31,8 @@ def clean_sentence(sentence):
     words = [synonyms[word] if word in synonyms else word for word in words]
 
     # Join the words back into a sentence
-    clean_sentence = ' '.join(words)
-    return clean_sentence.upper()
+    glossary = ' '.join(words)
+    return glossary.upper()
 
 def get_duration(filename):
     command = ['ffprobe', '-i', filename, '-show_entries', 'format=duration', '-v', 'quiet', '-of', 'csv=%s' % ("p=0")]
