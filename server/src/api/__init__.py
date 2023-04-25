@@ -71,13 +71,7 @@ def transcribe_youtube(url):
 # for testing purpose
 if __name__ == "__main__":
     print(transcribe_media('https://youtu.be/UOkOA6W-vwc'))
-    # filename = "vocal-spoken-the-realm-female-speech_75bpm_C_major.wav"
 
-    # output = audio_to_text(filename)
 
     # print(output)
     # https://youtu.be/skOTEbGwncE
-
-    # print("=" * 50)
-    # print("Output after cleaning:")
-    # print(clean_sentence(output))
