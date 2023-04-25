@@ -66,7 +66,7 @@ def transcribe_youtube(url):
             formatter = TextFormatter()
 
             return formatter.format_transcript(transcript).replace('\n', ' ')
-        except Exception as _:
+        except ValueError as _:
             return "Transcript is not available for this video."
     else:
         return 'Invalid youtube video link..'
