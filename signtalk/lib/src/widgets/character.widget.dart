@@ -3,12 +3,14 @@ import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:signtalk/src/constants/colors.dart';
 
 class Character extends StatelessWidget {
-  const Character({super.key});
+  const Character({super.key, required this.height});
+
+  final double height;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 370.0,
+      height: height,
       child: ModelViewer(
         backgroundColor: AppColors.whiteColor,
         src: 'assets/character/character.glb', // a bundled asset file

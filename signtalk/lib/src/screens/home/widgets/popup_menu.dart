@@ -21,7 +21,8 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
 
   final List<Widget> aboutBoxChildren = <Widget>[
     const SizedBox(height: 24),
-    const Text("We are team of deveolpers who have created this app to help "
+    const Text(
+        "We are team of students from GIFT university who have created this app to help "
         "to communicate with the people who are deaf and hard of hearing. "
         "We are dedicated to creating high-quality mobile applications that "
         "make your life "

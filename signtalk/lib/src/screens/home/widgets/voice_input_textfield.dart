@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:signtalk/src/config/services/audio_recorder.dart';
+import 'package:signtalk/src/services/services/audio_recorder.dart';
 import 'package:signtalk/src/constants/colors.dart';
 import 'package:signtalk/src/constants/globals/index.dart' as globals;
 import 'package:signtalk/src/screens/home/widgets/send_button.dart';

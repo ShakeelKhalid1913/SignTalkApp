@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:signtalk/src/constants/theme.dart';
 import 'package:signtalk/src/screens/home/index.dart';
 import 'package:signtalk/src/screens/onboarding/index.dart';
-import 'package:signtalk/src/screens/video_player/index.dart';
 import 'package:signtalk/src/utils/routes.dart';
 
 void main(List<String> args) {
@@ -14,6 +14,11 @@ class SignTalkApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     return MaterialApp(
       title: 'Sign Talk',
       debugShowCheckedModeBanner: false,

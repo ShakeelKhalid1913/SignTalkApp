@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:signtalk/src/constants/colors.dart';
 import 'package:signtalk/src/widgets/character.widget.dart';
 import 'package:signtalk/src/screens/home/widgets/popup_menu.dart';
 import 'package:signtalk/src/screens/home/widgets/voice_input_textfield.dart';
 import 'package:signtalk/src/screens/home/widgets/text_transcriber.dart';
-import '../../config/services/audio_recorder.dart';
+import '../../services/services/audio_recorder.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,32 +25,44 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: const Text("Sign Talk"),
+        title: Row(
+          children: const [
+            CircleAvatar(
+              backgroundImage: AssetImage('assets/images/2.png'),
+            ),
+            SizedBox(width: 8),
+            Text('SignTalk'),
+          ],
+        ),
         automaticallyImplyLeading: false,
         actions: [
-          CustomPopupMenu(
-            setMethodOfTranscript: setMethodOfTranscript
-            )
+          CustomPopupMenu(setMethodOfTranscript: setMethodOfTranscript)
         ],
       ),
       body: Container(
+        color: AppColors.whiteColor,
         padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
         child: Column(
-          verticalDirection: VerticalDirection.up,
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const Character(
+                      height: 600.0,
+                    ),
+                    if (_method != "None")
+                      TranscribeTextBuilder(
+                          method: _method, audioRecorder: _audioRecorder),
+                  ],
+                ),
+              ),
+            ),
             TextMicInputWidget(
               inputController: _inputController,
               setMethodOfTranscript: setMethodOfTranscript,
               audioRecorder: _audioRecorder,
             ),
-            const Character(),
-            if (_method != "None")
-              TranscribeTextBuilder(
-                method: _method,
-                audioRecorder: _audioRecorder,
-                setMethodOfTranscript: setMethodOfTranscript,
-              ),
           ],
         ),
       ),

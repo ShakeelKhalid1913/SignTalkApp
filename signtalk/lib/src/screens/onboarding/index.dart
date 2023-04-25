@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 import 'package:signtalk/src/constants/colors.dart';
-import 'package:signtalk/src/screens/onboarding/widgets/animated_btn.widget.dart';
+import 'package:signtalk/src/screens/onboarding/widgets/start_button.dart';
 import 'package:signtalk/src/utils/routes.dart';
 
 class OnBoardingScreen extends StatefulWidget {

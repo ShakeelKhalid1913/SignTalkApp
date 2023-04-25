@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:signtalk/src/constants/colors.dart';
 import 'package:signtalk/src/widgets/character.widget.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -20,8 +21,14 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
     _controller = YoutubePlayerController(
         initialVideoId: videoID!,
-        flags: const YoutubePlayerFlags(autoPlay: false));
+        flags: const YoutubePlayerFlags(autoPlay: false),);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -32,6 +39,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         title: const Text("Sign Talk"),
       ),
       body: Container(
+        color: AppColors.whiteColor,
         padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -41,7 +49,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
               showVideoProgressIndicator: true,
               onReady: () => debugPrint("ready"),
             ),
-            const Character(),
+            const Character(height: 450.0,),
             SizedBox(
               height: 50,
               width: 150,
