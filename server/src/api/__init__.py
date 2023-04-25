@@ -4,7 +4,7 @@ import requests
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
 
-from src.api.helper_functions import *
+from src.api.helper_functions import clean_sentence, convert_to_audio, get_duration, split_file_subparts
 
 API_URL = "https://api-inference.huggingface.co/models/openai/whisper-base"
 TOKEN = "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"

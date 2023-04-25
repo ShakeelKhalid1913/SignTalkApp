@@ -1,6 +1,6 @@
 from fastapi import FastAPI, File, UploadFile
 from pydantic import BaseModel
-from src.api import *
+from src.api import transcribe_media, transcribe_youtube, generate_glossary
 
 class Transcript(BaseModel):
     """
