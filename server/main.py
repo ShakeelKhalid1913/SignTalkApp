@@ -1,6 +1,7 @@
 from fastapi import FastAPI, File, UploadFile
 from pydantic import BaseModel
-from src.api import transcribe_media, transcribe_youtube, generate_glossary
+from src.api import *
+import tempfile
 
 
 class Transcript(BaseModel):
@@ -39,9 +40,11 @@ def index():
 async def audio(file: UploadFile = File()):
     contents = await file.read()
     filename = file.filename
-    with open(filename, "wb") as f:
+
+    with open(filename, 'wb') as f:
         f.write(contents)
-    text = transcribe_media(filename)
+    text = transcribe_media(filename) # whisper ai
+    # text = upload_file(filename) # assembly ai
     print(text)
     return {"text": text}
 
@@ -52,12 +55,6 @@ async def youtube(transcript: Transcript):
     return {"text": text}
 
 
-@app.post('/get_glossary')
-async def get_glossary(text: Text):
-    glossary = generate_glossary(text.glossary)
-    return {"glossary": glossary}
-
-
 if __name__ == '__main__':
     import uvicorn
-    uvicorn.run(app, host='127.0.0.1', port=8000)
+    uvicorn.run(app, host='0.0.0.0', port=8000)

@@ -19,7 +19,8 @@ class Character extends StatelessWidget {
         arModes: const ['scene-viewer', 'webxr', 'quick-look'],
         autoRotate: false,
         cameraControls: true,
-        disableZoom: false,
+        disableZoom: true,
+        
       ),
     );
   }

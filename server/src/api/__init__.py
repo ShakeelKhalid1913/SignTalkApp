@@ -1,16 +1,9 @@
 import os
 import re
-import requests
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
 
-from src.api.helper_functions import clean_sentence, \
-    convert_to_audio, get_duration, split_file_subparts
-
-API_URL = "https://api-inference.huggingface.co/models/openai/whisper-base"
-TOKEN = "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"
-
-headers = {"Authorization": f"Bearer {TOKEN}"}
+from src.api.helper_functions import *
 
 
 def generate_glossary(text):
@@ -41,7 +34,7 @@ def transcribe_media(filename):
             continue
         with open(subpart, "rb") as f:
             data = f.read()
-        response = requests.post(API_URL, headers=headers, data=data)
+        response = transcribe(data)
 
         output = response.json()
         transcript = transcript + output['text']
@@ -74,6 +67,58 @@ def transcribe_youtube(url):
     else:
         return 'Invalid youtube video link..'
 
+#! ASSEMBLY AI
+def read_file(filename, chunk_size=5242880):
+    with open(filename, 'rb') as _file:
+        while True:
+            data = _file.read(chunk_size)
+            if not data:
+                break
+            yield data
+
+
+def upload_file(filename):
+    api_token = "4fa61f36f16d48518104e9c9678a5b61"
+    print(f"Uploading file: {filename}")
+
+    headers = {'authorization': api_token}
+    response = requests.post('https://api.assemblyai.com/v2/upload',
+                             headers=headers,
+                             data=read_file(filename))
+    os.remove(filename)
+    if response.status_code == 200:
+        audio_url = response.json()["upload_url"]
+        return create_transcript(audio_url)
+    else:
+        print(f"Error: {response.status_code} - {response.text}")
+        return None
+
+def create_transcript(audio_url):
+    print("Transcribing audio... This might take a moment.")
+    api_token = "4fa61f36f16d48518104e9c9678a5b61"
+    url = "https://api.assemblyai.com/v2/transcript"
+    headers = {
+        "authorization": api_token,
+        "content-type": "application/json"
+    }
+    data = {
+        "audio_url": audio_url
+    }
+    response = requests.post(url, json=data, headers=headers)
+    transcript_id = response.json()['id']
+    polling_endpoint = f"https://api.assemblyai.com/v2/transcript/{transcript_id}"
+
+    while True:
+        transcription_result = requests.get(polling_endpoint, headers=headers).json()
+
+        if transcription_result['status'] == 'completed':
+            break
+        elif transcription_result['status'] == 'error':
+            raise RuntimeError(f"Transcription failed: {transcription_result['error']}")
+        else:
+            time.sleep(3)
+
+    return transcription_result['text']
 
 # for testing purpose
 if __name__ == "__main__":

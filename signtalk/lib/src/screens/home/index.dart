@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   children: [
                     const Character(
-                      height: 600.0,
+                      height: 580.0,
                     ),
                     if (_method != "None")
                       TranscribeTextBuilder(
