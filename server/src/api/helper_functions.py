@@ -1,20 +1,12 @@
-import subprocess
-import requests
-import time
-
 import re
+import nltk
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 import contractions
 from src.syn import synonyms
 
-def transcribe(data):
-    API_URL = "https://api-inference.huggingface.co/models/openai/whisper-base"
-    TOKEN = "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"
-
-    headers = {"Authorization": f"Bearer {TOKEN}"}
-    response = requests.post(API_URL, headers=headers, data=data)
-    return response
+nltk.download('punkt')
+nltk.download('wordnet')
 
 def clean_sentence(sentence):
     # remove contraction
@@ -42,26 +34,6 @@ def clean_sentence(sentence):
     # Join the words back into a sentence
     glossary = ' '.join(words)
     return glossary.upper()
-
-
-def get_duration(filename):
-    command = ['ffprobe', '-i', filename, '-show_entries',
-               'format=duration', '-v', 'quiet', '-of', 'csv=p=0']
-    output = subprocess.check_output(command)
-    return float(output)
-
-
-def split_file_subparts(filename, subpart_duration, ext):
-    command = ['ffmpeg', '-i', filename, '-c', 'copy', '-map', '0', '-segment_time',
-                str(subpart_duration), '-f', 'segment', f'temp/media_%03d.{ext}']
-    subprocess.run(command, check=True)
-
-
-
-def convert_to_audio(video_file, audio_file):
-    command = ['ffmpeg', '-i', video_file, '-vn', '-acodec', 'mp3', audio_file]
-    subprocess.run(command, check=True)
-
 
 if __name__=='_main_':
     clean_sentence("i need glass of water")

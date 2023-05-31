@@ -1,5 +1,6 @@
 /.idea
 /signtalk/.idea
 /signtalk/.dart_tool
-/server/.venv
-/motion_capture/venv
+/.venv
+/dart_server
+__pycache__/

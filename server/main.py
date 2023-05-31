@@ -38,13 +38,9 @@ def index():
 
 @app.post('/media')
 async def audio(file: UploadFile = File()):
-    contents = await file.read()
+    contents = await file.read(CHUNK_SIZE)
     filename = file.filename
-
-    with open(filename, 'wb') as f:
-        f.write(contents)
-    text = transcribe_media(filename) # whisper ai
-    # text = upload_file(filename) # assembly ai
+    text = upload_file(filename, contents)
     print(text)
     return {"text": text}
 
