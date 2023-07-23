@@ -25,8 +25,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Row(
-          children: const [
+        title: const Row(
+          children: [
             CircleAvatar(
               backgroundImage: AssetImage('assets/images/2.png'),
             ),
@@ -48,9 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    const Character(
-                      height: 580.0,
-                    ),
+                    // const Character(
+                    //   height: 580.0,
+                    // ),
                     if (_method != "None")
                       TranscribeTextBuilder(
                           method: _method, audioRecorder: _audioRecorder),

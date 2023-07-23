@@ -49,7 +49,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
               showVideoProgressIndicator: true,
               onReady: () => debugPrint("ready"),
             ),
-            const Character(height: 450.0,),
+            // const Character(height: 450.0,),
             SizedBox(
               height: 50,
               width: 150,

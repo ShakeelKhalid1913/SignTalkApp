@@ -24,7 +24,7 @@ class SignTalkApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: Themes.lightTheme(context),
       darkTheme: Themes.darkTheme(context),
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.light,
       initialRoute: '/',
       routes: {
         Routes.onBoardingScreen: (_) => const OnBoardingScreen(),
