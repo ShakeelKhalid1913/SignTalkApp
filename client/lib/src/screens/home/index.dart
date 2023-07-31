@@ -12,7 +12,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String _method = "None";
 
-  void setMethodOfTranscript(String val) => setState(() => _method = val);
+  void setMethodOfTranscript(String val) {
+    setState(() => _method = val);
+
+    print(_method);
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -5,8 +5,8 @@ from nltk.stem import WordNetLemmatizer
 import contractions
 from src.syn import synonyms
 
-nltk.download('punkt')
-nltk.download('wordnet')
+# nltk.download('punkt')
+# nltk.download('wordnet')
 
 def clean_sentence(sentence):
     # remove contraction

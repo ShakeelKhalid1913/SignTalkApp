@@ -25,8 +25,9 @@ class TextInput extends StatelessWidget {
           //   color: AppColors.greyTextColor,
           //   fontWeight: FontWeight.w500,
           // ),
-          border: const OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.kColor)),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(50.0),
+              borderSide:const BorderSide(color: AppColors.kColor)),
           contentPadding:
               const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
           suffixIcon: IconButton(

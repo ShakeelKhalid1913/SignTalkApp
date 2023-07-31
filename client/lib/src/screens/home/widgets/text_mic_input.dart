@@ -1,22 +1,21 @@
-import 'dart:async';
-
 import 'package:client/src/constants/colors.dart';
 import 'package:client/src/screens/home/widgets/mic_button.dart';
 import 'package:client/src/screens/home/widgets/text_input.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:client/src/services/services/audio_recorder.dart';
 
 class TextMicInputWidget extends StatefulWidget {
   const TextMicInputWidget(
       {super.key,
-      required this.callback,
+      required this.animate,
+      required this.transcript,
       required this.inputController,
       required this.setMethodOfTranscript,
       required this.audioRecorder});
 
-  final Function(String) callback;
+  final Function(String) animate;
+  final Function(String) transcript;
   final TextEditingController inputController;
   final Function(String) setMethodOfTranscript;
   final AudioRecorder audioRecorder;
@@ -47,7 +46,7 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
           mode == "text"
               ? FloatingActionButton(
                   onPressed: () {
-                    widget.callback(widget.inputController.text);
+                    widget.animate(widget.inputController.text);
                   },
                   backgroundColor: AppColors.kColor,
                   child: Container(
@@ -66,6 +65,8 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
               : MicButton(
                   setMethodOfTranscript: widget.setMethodOfTranscript,
                   audioRecorder: widget.audioRecorder,
+                  transcript: widget.transcript,
+                  animate: widget.animate,
                 )
         ],
       ),

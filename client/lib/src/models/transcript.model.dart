@@ -1,5 +1,5 @@
 class Transcript {
-  final String text;
+  String text;
 
   Transcript({required this.text});
 

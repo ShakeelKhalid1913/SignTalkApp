@@ -8,12 +8,16 @@ import 'package:client/src/constants/globals/index.dart' as globals;
 class MicButton extends StatefulWidget {
   const MicButton({
     super.key,
+    required this.transcript,
     required this.setMethodOfTranscript,
     required this.audioRecorder,
+    required this.animate,
   });
 
   final AudioRecorder audioRecorder;
   final Function(String) setMethodOfTranscript;
+  final Function(String) transcript;
+  final Function(String) animate;
 
   @override
   State<MicButton> createState() => _MicButtonState();
@@ -71,6 +75,9 @@ class _MicButtonState extends State<MicButton> {
       setState(() {
         globals.transcriptMethod = "Mic";
       });
+      widget.transcript("Mic");
+      widget.animate(globals.transcript.text);
+      print(globals.transcript.text);
       showToast("Recording stopped");
     } else {
       showToast(

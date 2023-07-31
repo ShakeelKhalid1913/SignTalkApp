@@ -1,10 +1,17 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:client/src/constants/colors.dart';
 import 'package:client/src/screens/home/widgets/text_mic_input.dart';
-import 'package:client/src/screens/home/widgets/text_transcriber.dart';
 import 'package:client/src/services/services/audio_recorder.dart';
+import 'package:client/src/widgets/dialog_box.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:client/src/services/services/api_services.dart' as app_services;
+import 'package:client/src/services/services/youtube_transcript.dart'
+    as youtube_transcript_service;
+import 'package:client/src/constants/globals/index.dart' as globals;
 
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/animation/index.dart';
@@ -12,7 +19,7 @@ import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class Character extends StatefulWidget {
-  dynamic Function(String) setMethodOfTranscript;
+  Function(String) setMethodOfTranscript;
   String method;
 
   Character(
@@ -26,12 +33,13 @@ class Character extends StatefulWidget {
 class CharacterState extends State<Character> {
   final AudioRecorder audioRecorder = AudioRecorder();
   final TextEditingController inputController = TextEditingController();
-  bool isPlaying = false;
   var _currentAnimation = 0;
   late double width;
   late double height;
   Map<String, dynamic> animationsMap = {};
   bool loaded = false;
+  bool isLoading = true;
+  String transcriptText = "";
 
   late FlutterGlPlugin three3dRender;
   late THREE.WebGLRenderer renderer;
@@ -91,8 +99,52 @@ class CharacterState extends State<Character> {
 
     Future.delayed(const Duration(milliseconds: 100), () async {
       await three3dRender.prepareContext();
-
       initScene();
+    });
+  }
+
+  void changeText(String text) {
+    setState(() {
+      transcriptText = text;
+    });
+  }
+
+  Future<String> _transcript(String method) {
+    changeText("Transcripting...(Please wait)");
+    debugPrint(method);
+    if (method == "Mic") {
+      return app_services.transcriptFile(audioRecorder.recordFilePath);
+    } else if (method == "File") {
+      FilePicker.platform.pickFiles(
+        allowedExtensions: ['wav', 'mp3', 'm4a', 'mp4'],
+        type: FileType.custom,
+      ).then((result) {
+        if (result != null) {
+          File file = File(result.files.single.path!);
+          return app_services.transcriptFile(file.path);
+        } else {
+          return "File did not pick";
+        }
+      });
+    } else if (method == "Youtube") {
+      //with python server
+      // return app_services.transcriptYoutubeVideo(globals.transcript.text);
+      //with dart server
+      return youtube_transcript_service
+          .getYoutubeVideoTranscript(globals.transcript.text);
+    }
+    return Future.value("No method selected");
+  }
+
+  void transcript(String method) {
+    changeText("Transcripting...(Please wait)");
+    _transcript(method).then((value) {
+      changeText(value);
+      playAllAnimations(value);
+      //TODO: working on it
+      DialogBox.dialog(context, "Error", "ok");
+    }).catchError((e) {
+      DialogBox.dialog(context, "Error", e.toString());
     });
   }
 
@@ -112,32 +164,26 @@ class CharacterState extends State<Character> {
         Stack(
           children: [
             _characterBuild(),
-            // Container(
-            //   width: width,
-            //   height: height,
-            //   color: Colors.red,
-            // ),
-            if (widget.method != "None")
-              Positioned(
-                top: 0,
-                left: 0,
+            Positioned.fill(
+                child: Align(
+              alignment: Alignment.topCenter,
+              child: Text(
+                transcriptText,
+                style: const TextStyle(fontSize: 30),
+              ),
+            )),
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.bottomCenter,
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  child: TranscribeTextBuilder(
-                      callback: playAllAnimations,
-                      method: widget.method, audioRecorder: audioRecorder),
+                  child: TextMicInputWidget(
+                      inputController: inputController,
+                      setMethodOfTranscript: widget.setMethodOfTranscript,
+                      audioRecorder: audioRecorder,
+                      transcript: transcript,
+                      animate: playAllAnimations),
                 ),
-              ),
-            Positioned(
-              bottom: 10,
-              left: 0,
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: TextMicInputWidget(
-                    inputController: inputController,
-                    setMethodOfTranscript: widget.setMethodOfTranscript,
-                    audioRecorder: audioRecorder,
-                    callback: playAllAnimations),
               ),
             ),
           ],
@@ -155,6 +201,18 @@ class CharacterState extends State<Character> {
           height: height,
           child: Builder(
             builder: (BuildContext context) {
+              if (isLoading) {
+                return const SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(AppColors.redColor),
+                    ),
+                  ),
+                );
+              }
               if (kIsWeb) {
                 return three3dRender.isInitialized
                     ? HtmlElementView(
@@ -272,12 +330,14 @@ class CharacterState extends State<Character> {
     //print all animations names
     print(animationsMap.keys);
 
-    loaded = true;
+    setState(() {
+      loaded = true;
+      isLoading = false;
+    });
     animate();
   }
 
   void playAllAnimations(String text) {
-    setState(() => isPlaying = true);
     _currentAnimation = 0;
     var animationNames = [];
     var temp = text.toLowerCase().split(" ");
@@ -287,7 +347,9 @@ class CharacterState extends State<Character> {
         animationNames.add(temp[i]);
       } else {
         for (var j = 0; j < temp[i].length; j++) {
-          animationNames.add(temp[i][j]);
+          if (animationsMap.containsKey(temp[i][j])) {
+            animationNames.add(temp[i][j]);
+          }
         }
       }
     }
@@ -295,6 +357,7 @@ class CharacterState extends State<Character> {
     void playNextAnimation() {
       if (_currentAnimation < animationNames.length) {
         playAnimation(animationNames[_currentAnimation]);
+        changeText(animationNames[_currentAnimation]);
         //get duration of current animation
         var duration =
             animationsMap[animationNames[_currentAnimation]]!.duration;
@@ -304,8 +367,6 @@ class CharacterState extends State<Character> {
             () {
           playNextAnimation();
         });
-      } else {
-        setState(() => isPlaying = false);
       }
     }
 
