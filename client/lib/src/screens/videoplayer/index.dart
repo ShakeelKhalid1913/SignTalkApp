@@ -20,7 +20,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
     _controller = YoutubePlayerController(
       initialVideoId: videoID!,
-      flags: const YoutubePlayerFlags(autoPlay: false),);
+      flags: const YoutubePlayerFlags(autoPlay: false),
+    );
     super.initState();
   }
 
@@ -43,10 +44,24 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            YoutubePlayer(
-              controller: _controller,
-              showVideoProgressIndicator: true,
-              onReady: () => debugPrint("ready"),
+            Stack(
+              children: [
+                YoutubePlayer(
+                  controller: _controller,
+                  showVideoProgressIndicator: true,
+                  onReady: () => debugPrint("ready"),
+                ),
+                Positioned(
+                  top: 20, // Adjust the positioning as needed
+                  left: 20, // Adjust the positioning as needed
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Handle button press
+                    },
+                    child: Text('Your Button'),
+                  ),
+                ),
+              ],
             ),
             // const Character(height: 450.0,),
             SizedBox(

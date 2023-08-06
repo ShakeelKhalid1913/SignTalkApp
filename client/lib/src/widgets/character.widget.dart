@@ -1,17 +1,11 @@
 import 'dart:async';
-import 'dart:io';
-
+import 'dart:convert';
 import 'package:client/src/constants/colors.dart';
 import 'package:client/src/screens/home/widgets/text_mic_input.dart';
-import 'package:client/src/services/services/audio_recorder.dart';
 import 'package:client/src/widgets/dialog_box.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:client/src/services/services/api_services.dart' as app_services;
-import 'package:client/src/services/services/youtube_transcript.dart'
-    as youtube_transcript_service;
-import 'package:client/src/constants/globals/index.dart' as globals;
 
 import 'package:flutter_gl/flutter_gl.dart';
 import 'package:three_dart/three3d/animation/index.dart';
@@ -19,11 +13,10 @@ import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class Character extends StatefulWidget {
-  Function(String) setMethodOfTranscript;
-  String method;
+  final Function(String) setMethodOfTranscript;
 
-  Character(
-      {Key? key, required this.method, required this.setMethodOfTranscript})
+  const Character(
+      {Key? key, required this.setMethodOfTranscript})
       : super(key: key);
 
   @override
@@ -31,14 +24,12 @@ class Character extends StatefulWidget {
 }
 
 class CharacterState extends State<Character> {
-  final AudioRecorder audioRecorder = AudioRecorder();
   final TextEditingController inputController = TextEditingController();
   var _currentAnimation = 0;
   late double width;
   late double height;
   Map<String, dynamic> animationsMap = {};
   bool loaded = false;
-  bool isLoading = true;
   String transcriptText = "";
 
   late FlutterGlPlugin three3dRender;
@@ -109,40 +100,13 @@ class CharacterState extends State<Character> {
     });
   }
 
-  Future<String> _transcript(String method) {
-    changeText("Transcripting...(Please wait)");
-    debugPrint(method);
-    if (method == "Mic") {
-      return app_services.transcriptFile(audioRecorder.recordFilePath);
-    } else if (method == "File") {
-      FilePicker.platform.pickFiles(
-        allowedExtensions: ['wav', 'mp3', 'm4a', 'mp4'],
-        type: FileType.custom,
-      ).then((result) {
-        if (result != null) {
-          File file = File(result.files.single.path!);
-          return app_services.transcriptFile(file.path);
-        } else {
-          return "File did not pick";
-        }
-      });
-    } else if (method == "Youtube") {
-      //with python server
-      // return app_services.transcriptYoutubeVideo(globals.transcript.text);
-      //with dart server
-      return youtube_transcript_service
-          .getYoutubeVideoTranscript(globals.transcript.text);
-    }
-    return Future.value("No method selected");
-  }
-
   void transcript(String method) {
     changeText("Transcripting...(Please wait)");
-    _transcript(method).then((value) {
-      changeText(value);
-      playAllAnimations(value);
-      //TODO: working on it
-      DialogBox.dialog(context, "Error", "ok");
+    app_services.transcript(method).then((value) {
+      inputController.text = jsonDecode(value)['text'];
+      var glossaryText = jsonDecode(value)['glossart_text'];
+      changeText(glossaryText);
+      playAllAnimations(glossaryText);
     }).catchError((e) {
       DialogBox.dialog(context, "Error", e.toString());
     });
@@ -180,7 +144,6 @@ class CharacterState extends State<Character> {
                   child: TextMicInputWidget(
                       inputController: inputController,
                       setMethodOfTranscript: widget.setMethodOfTranscript,
-                      audioRecorder: audioRecorder,
                       transcript: transcript,
                       animate: playAllAnimations),
                 ),
@@ -198,10 +161,10 @@ class CharacterState extends State<Character> {
       builder: (BuildContext conetxt) {
         return SizedBox(
           width: width,
-          height: height,
+          height: height - 30,
           child: Builder(
             builder: (BuildContext context) {
-              if (isLoading) {
+              if (!loaded) {
                 return const SizedBox(
                   height: 50,
                   width: 50,
@@ -304,7 +267,7 @@ class CharacterState extends State<Character> {
 
     // load model
     var loader = THREE_JSM.GLTFLoader(null).setPath('assets/model/');
-    var result = await loader.loadAsync('alphabet.glb');
+    var result = await loader.loadAsync('animations.glb');
 
     model = result["scene"];
 
@@ -330,10 +293,7 @@ class CharacterState extends State<Character> {
     //print all animations names
     print(animationsMap.keys);
 
-    setState(() {
-      loaded = true;
-      isLoading = false;
-    });
+    setState(() => loaded = true);
     animate();
   }
 
@@ -363,9 +323,11 @@ class CharacterState extends State<Character> {
             animationsMap[animationNames[_currentAnimation]]!.duration;
         _currentAnimation++;
         //play next animation after current animation is done
-        Future.delayed(Duration(milliseconds: (duration * 1000).toInt() - 100),
+        Future.delayed(Duration(milliseconds: (duration * 1000).toInt() - 500),
             () {
           playNextAnimation();
+
+          //changeText("");
         });
       }
     }

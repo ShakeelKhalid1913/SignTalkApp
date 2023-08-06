@@ -5,7 +5,7 @@ class Api {
   //should be the ip of the computer running the server get it using ipconfig
   //mobile:    http://192.168.0.107:8000
   //emulator:  http://10.0.2.2:8000
-  static const String url = "http://10.0.2.2:8000";
+  static const String url = "http://0.0.0.0:8000";
   static const String audio2text = "$url/media";
   static const String youtube2text = "$url/youtube";
 

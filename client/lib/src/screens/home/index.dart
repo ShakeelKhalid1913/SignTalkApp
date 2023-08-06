@@ -14,8 +14,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void setMethodOfTranscript(String val) {
     setState(() => _method = val);
-
-    print(_method);
   }
 
   @override
@@ -37,10 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
           CustomPopupMenu(setMethodOfTranscript: setMethodOfTranscript)
         ],
       ),
-      body: Character(
-        setMethodOfTranscript: setMethodOfTranscript,
-        method: _method,
-      ),
+      body: Character(setMethodOfTranscript: setMethodOfTranscript),
     );
   }
 }

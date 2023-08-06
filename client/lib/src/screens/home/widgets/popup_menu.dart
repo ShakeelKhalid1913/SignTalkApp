@@ -5,6 +5,7 @@ import 'package:client/src/constants/colors.dart';
 import 'package:client/src/models/enums/options.enum.dart';
 import 'package:client/src/models/transcript.model.dart';
 import 'package:client/src/constants/globals/index.dart' as globals;
+import 'package:client/src/services/services/api_services.dart' as api_services;
 
 class CustomPopupMenu extends StatefulWidget {
   const CustomPopupMenu({super.key, required this.setMethodOfTranscript});
@@ -23,11 +24,11 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
     const SizedBox(height: 24),
     const Text(
         "We are team of students from GIFT university who have created this app to help "
-            "to communicate with the people who are deaf and hard of hearing. "
-            "We are dedicated to creating high-quality mobile applications that "
-            "make your life "
-            "easier. Our apps are designed with a focus on usability, "
-            "performance, and user experience.")
+        "to communicate with the people who are deaf and hard of hearing. "
+        "We are dedicated to creating high-quality mobile applications that "
+        "make your life "
+        "easier. Our apps are designed with a focus on usability, "
+        "performance, and user experience.")
   ];
 
   Future<dynamic> dialog() {
@@ -52,7 +53,7 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
                 onPressed: () {
                   setState(() {
                     globals.transcript = Transcript(text: _controller.text);
-                    globals.transcriptMethod = "Youtube";
+                    //globals.transcriptMethod = "Youtube";
                   });
 
                   widget.setMethodOfTranscript("Youtube");
@@ -88,14 +89,17 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
               color: AppColors.kColor,
             ),
             title: const Text("Upload File"),
-            onTap: () => widget.setMethodOfTranscript("File"),
+            onTap: () {
+              widget.setMethodOfTranscript("File");
+              api_services.transcript("File");
+            },
           ),
         ),
         PopupMenuItem<Options>(
           value: Options.url,
           child: ListTile(
             leading:
-            const FaIcon(FontAwesomeIcons.youtube, color: AppColors.kColor),
+                const FaIcon(FontAwesomeIcons.youtube, color: AppColors.kColor),
             title: const Text("Load Youtube Video"),
             onTap: dialog,
           ),

@@ -13,7 +13,8 @@ class TextInput extends StatelessWidget {
     return Expanded(
       child: TextField(
         controller: inputController,
-        maxLines: 1,
+        maxLines: 3,
+        minLines: 1,
         cursorColor: AppColors.greenColor,
         // style: GoogleFonts.quicksand(
         //   fontWeight: FontWeight.w500,

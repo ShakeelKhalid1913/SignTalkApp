@@ -3,7 +3,6 @@ import 'package:client/src/screens/home/widgets/mic_button.dart';
 import 'package:client/src/screens/home/widgets/text_input.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:client/src/services/services/audio_recorder.dart';
 
 class TextMicInputWidget extends StatefulWidget {
   const TextMicInputWidget(
@@ -11,14 +10,12 @@ class TextMicInputWidget extends StatefulWidget {
       required this.animate,
       required this.transcript,
       required this.inputController,
-      required this.setMethodOfTranscript,
-      required this.audioRecorder});
+      required this.setMethodOfTranscript});
 
   final Function(String) animate;
   final Function(String) transcript;
   final TextEditingController inputController;
   final Function(String) setMethodOfTranscript;
-  final AudioRecorder audioRecorder;
 
   @override
   State<TextMicInputWidget> createState() => _TextMicInputWidget();
@@ -33,8 +30,8 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50,
-      margin: const EdgeInsets.fromLTRB(5, 5, 5, 20),
+      //height: 50,
+      margin: const EdgeInsets.fromLTRB(5, 0, 5, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -64,7 +61,6 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
                   ))
               : MicButton(
                   setMethodOfTranscript: widget.setMethodOfTranscript,
-                  audioRecorder: widget.audioRecorder,
                   transcript: widget.transcript,
                   animate: widget.animate,
                 )

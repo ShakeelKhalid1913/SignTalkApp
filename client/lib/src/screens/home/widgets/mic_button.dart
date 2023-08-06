@@ -1,5 +1,4 @@
 import 'package:client/src/constants/colors.dart';
-import 'package:client/src/services/services/audio_recorder.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -10,11 +9,9 @@ class MicButton extends StatefulWidget {
     super.key,
     required this.transcript,
     required this.setMethodOfTranscript,
-    required this.audioRecorder,
     required this.animate,
   });
 
-  final AudioRecorder audioRecorder;
   final Function(String) setMethodOfTranscript;
   final Function(String) transcript;
   final Function(String) animate;
@@ -44,7 +41,7 @@ class _MicButtonState extends State<MicButton> {
   }
 
   void _startRecording() async {
-    if (await widget.audioRecorder.checkPermission()) {
+    if (await globals.audioRecorder.checkPermission()) {
       // final connectivityResult = await Connectivity().checkConnectivity();
       // if (connectivityResult == ConnectivityResult.none) {
       //   showToast("Please connect to the internet");
@@ -56,7 +53,7 @@ class _MicButtonState extends State<MicButton> {
       setState(() => _isRecording = true);
       _stopwatch = Stopwatch();
       _stopwatch.start();
-      widget.audioRecorder.startRecord();
+      globals.audioRecorder.startRecord();
     } else {
       showToast("Please grant permission to record audio");
     }
@@ -64,7 +61,7 @@ class _MicButtonState extends State<MicButton> {
 
   void _stopRecording() async {
     setState(() => _isRecording = false);
-    widget.audioRecorder.stopRecord();
+    globals.audioRecorder.stopRecord();
     _stopwatch.stop();
     var timeElapsedInSeconds = _stopwatch.elapsed.inSeconds;
 
@@ -72,12 +69,9 @@ class _MicButtonState extends State<MicButton> {
     if (timeElapsedInSeconds >= globals.minRecordingTime) {
       await Future.delayed(const Duration(milliseconds: 1000));
       widget.setMethodOfTranscript("Mic");
-      setState(() {
-        globals.transcriptMethod = "Mic";
-      });
       widget.transcript("Mic");
       widget.animate(globals.transcript.text);
-      print(globals.transcript.text);
+      debugPrint(globals.transcript.text);
       showToast("Recording stopped");
     } else {
       showToast(

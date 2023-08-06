@@ -82,6 +82,6 @@ def create_transcript(audio_url):
         else:
             time.sleep(3)
 
-    return clean_sentence(transcription_result['text'])
+    return transcription_result['text'], clean_sentence(transcription_result['text'])
 
 # 'https://youtu.be/H5GETOP7ivs'
