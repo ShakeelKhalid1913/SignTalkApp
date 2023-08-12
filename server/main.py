@@ -44,8 +44,9 @@ async def audio(file: UploadFile = File()):
     contents = await file.read(CHUNK_SIZE)
     filename = file.filename
     text, glossary_text = upload_file(filename, contents)
+    # text, glossary_text = ("hello", "OK")
     print(text, glossary_text)
-    return {"text": text, "glossart_text": glossary_text}
+    return {"text": text, "glossary_text": glossary_text}
 
 
 @app.post('/youtube')

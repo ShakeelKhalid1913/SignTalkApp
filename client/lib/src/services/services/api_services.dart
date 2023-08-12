@@ -26,27 +26,35 @@ Future<String> transcriptYoutubeVideo(String url) async {
   return await response
       .then((value) => jsonDecode(value.body)['text'])
       .catchError(
-          (error) => "Error in transcription file: ${error.toString()}");
+          (error) => "Error (Maybe Network issue): ${error.toString()}");
 }
 
-Future<String> transcript(String method) {
+Future<String> generateGlossary(String text) async {
+  final response = Api.generateGlossary(text);
+  return await response
+      .then((value) => jsonDecode(value.body)['glossary'])
+      .catchError(
+          (error) => "Error (Maybe Network issue): ${error.toString()}");
+}
+
+Future<String> transcript(String method) async {
   debugPrint(method);
+  String output = "";
   if (method == "Mic") {
-    return transcriptFile(globals.audioRecorder.recordFilePath);
-  } else if (method == "File") {
-    FilePicker.platform.pickFiles(
+    output = await transcriptFile(globals.audioRecorder.recordFilePath);
+  } else if (method == "Youtube") {
+    output = await youtube_transcript_service.getYoutubeVideoTranscript("");
+  }
+  // else method will be "File"
+  else {
+    var result = await FilePicker.platform.pickFiles(
       allowedExtensions: ['wav', 'mp3', 'm4a', 'mp4'],
       type: FileType.custom,
-    ).then((result) {
-      if (result != null) {
-        File file = File(result.files.first.path!);
-        return transcriptFile(file.path);
-      } else {
-        return "File did not pick";
-      }
-    });
-  } else if (method == "Youtube") {
-    return youtube_transcript_service.getYoutubeVideoTranscript("");
+    );
+
+    File file = File(result!.files.single.path!);
+    output = await transcriptFile(file.path);
   }
-  return Future.value("No method selected");
+
+  return output;
 }

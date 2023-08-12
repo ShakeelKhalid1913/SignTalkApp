@@ -5,16 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:client/src/constants/globals/index.dart' as globals;
 
 class MicButton extends StatefulWidget {
-  const MicButton({
-    super.key,
-    required this.transcript,
-    required this.setMethodOfTranscript,
-    required this.animate,
-  });
-
-  final Function(String) setMethodOfTranscript;
-  final Function(String) transcript;
-  final Function(String) animate;
+  const MicButton({super.key});
 
   @override
   State<MicButton> createState() => _MicButtonState();
@@ -67,12 +58,10 @@ class _MicButtonState extends State<MicButton> {
 
     debugPrint("${timeElapsedInSeconds.toString()} seconds");
     if (timeElapsedInSeconds >= globals.minRecordingTime) {
-      await Future.delayed(const Duration(milliseconds: 1000));
-      widget.setMethodOfTranscript("Mic");
-      widget.transcript("Mic");
-      widget.animate(globals.transcript.text);
-      debugPrint(globals.transcript.text);
       showToast("Recording stopped");
+      await Future.delayed(const Duration(milliseconds: 1000));
+      globals.characterKey.currentState?.transcript("Mic");
+      debugPrint(globals.transcript.text);
     } else {
       showToast(
           'Please hold the button for at least ${globals.minRecordingTime} seconds.');

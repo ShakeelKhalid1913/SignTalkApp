@@ -3,19 +3,14 @@ import 'package:client/src/screens/home/widgets/mic_button.dart';
 import 'package:client/src/screens/home/widgets/text_input.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:client/src/services/services/api_services.dart' as api_services;
+import 'package:client/src/constants/globals/index.dart' as globals;
 
 class TextMicInputWidget extends StatefulWidget {
   const TextMicInputWidget(
-      {super.key,
-      required this.animate,
-      required this.transcript,
-      required this.inputController,
-      required this.setMethodOfTranscript});
+      {super.key, required this.inputController});
 
-  final Function(String) animate;
-  final Function(String) transcript;
   final TextEditingController inputController;
-  final Function(String) setMethodOfTranscript;
 
   @override
   State<TextMicInputWidget> createState() => _TextMicInputWidget();
@@ -43,7 +38,12 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
           mode == "text"
               ? FloatingActionButton(
                   onPressed: () {
-                    widget.animate(widget.inputController.text);
+                    api_services
+                        .generateGlossary(widget.inputController.text)
+                        .then((value) {
+                      globals.characterKey.currentState
+                          ?.playAllAnimations(value);
+                    });
                   },
                   backgroundColor: AppColors.kColor,
                   child: Container(
@@ -59,11 +59,7 @@ class _TextMicInputWidget extends State<TextMicInputWidget> {
                       color: AppColors.whiteColor,
                     ),
                   ))
-              : MicButton(
-                  setMethodOfTranscript: widget.setMethodOfTranscript,
-                  transcript: widget.transcript,
-                  animate: widget.animate,
-                )
+              : MicButton()
         ],
       ),
     );

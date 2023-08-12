@@ -13,11 +13,7 @@ import 'package:three_dart/three_dart.dart' as THREE;
 import 'package:three_dart_jsm/three_dart_jsm.dart' as THREE_JSM;
 
 class Character extends StatefulWidget {
-  final Function(String) setMethodOfTranscript;
-
-  const Character(
-      {Key? key, required this.setMethodOfTranscript})
-      : super(key: key);
+  const Character({Key? key}) : super(key: key);
 
   @override
   createState() => CharacterState();
@@ -103,12 +99,13 @@ class CharacterState extends State<Character> {
   void transcript(String method) {
     changeText("Transcripting...(Please wait)");
     app_services.transcript(method).then((value) {
+      debugPrint(value);
       inputController.text = jsonDecode(value)['text'];
-      var glossaryText = jsonDecode(value)['glossart_text'];
+      var glossaryText = jsonDecode(value)['glossary_text'];
       changeText(glossaryText);
       playAllAnimations(glossaryText);
     }).catchError((e) {
-      DialogBox.dialog(context, "Error", e.toString());
+      DialogBox.dialog(context, "Erro2", e.toString());
     });
   }
 
@@ -141,11 +138,7 @@ class CharacterState extends State<Character> {
                 alignment: Alignment.bottomCenter,
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  child: TextMicInputWidget(
-                      inputController: inputController,
-                      setMethodOfTranscript: widget.setMethodOfTranscript,
-                      transcript: transcript,
-                      animate: playAllAnimations),
+                  child: TextMicInputWidget(inputController: inputController),
                 ),
               ),
             ),

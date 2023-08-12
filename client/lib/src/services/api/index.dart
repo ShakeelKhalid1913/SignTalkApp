@@ -5,9 +5,10 @@ class Api {
   //should be the ip of the computer running the server get it using ipconfig
   //mobile:    http://192.168.0.107:8000
   //emulator:  http://10.0.2.2:8000
-  static const String url = "http://0.0.0.0:8000";
+  static const String url = "http://10.0.2.2:8000";
   static const String audio2text = "$url/media";
   static const String youtube2text = "$url/youtube";
+  static const String text2glossary = "$url/text";
 
   static Future<http.StreamedResponse> uploadAudio(
       String path, String filename) async {
@@ -24,6 +25,16 @@ class Api {
         'Content-Type': 'application/json',
       },
       body: jsonEncode({'youtube_url': youtubeUrl}),
+    );
+  }
+
+  static Future<http.Response> generateGlossary(String text) async {
+    return await http.post(
+      Uri.parse(text2glossary),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({'text': text}),
     );
   }
 }

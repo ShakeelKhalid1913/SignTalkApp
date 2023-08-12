@@ -1,4 +1,5 @@
 import 'package:client/src/screens/videoplayer/index.dart';
+import 'package:client/src/widgets/character.widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:client/src/constants/colors.dart';
@@ -8,9 +9,7 @@ import 'package:client/src/constants/globals/index.dart' as globals;
 import 'package:client/src/services/services/api_services.dart' as api_services;
 
 class CustomPopupMenu extends StatefulWidget {
-  const CustomPopupMenu({super.key, required this.setMethodOfTranscript});
-
-  final Function(String) setMethodOfTranscript;
+  const CustomPopupMenu({super.key});
 
   @override
   State<CustomPopupMenu> createState() => _CustomPopupMenuState();
@@ -55,8 +54,6 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
                     globals.transcript = Transcript(text: _controller.text);
                     //globals.transcriptMethod = "Youtube";
                   });
-
-                  widget.setMethodOfTranscript("Youtube");
                   // _controller.clear();
                   debugPrint("Youtube Video URL: ${_controller.text}");
                   Navigator.of(context).pop();
@@ -90,8 +87,10 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
             ),
             title: const Text("Upload File"),
             onTap: () {
-              widget.setMethodOfTranscript("File");
-              api_services.transcript("File");
+              CharacterState? state = globals.characterKey.currentState;
+              if(state != null){
+                state.transcript("File");
+              }
             },
           ),
         ),

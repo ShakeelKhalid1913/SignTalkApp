@@ -1,6 +1,7 @@
 import 'package:client/src/screens/home/widgets/popup_menu.dart';
 import 'package:client/src/widgets/character.widget.dart';
 import 'package:flutter/material.dart';
+import 'package:client/src/constants/globals/index.dart' as globals;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,12 +11,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String _method = "None";
-
-  void setMethodOfTranscript(String val) {
-    setState(() => _method = val);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,11 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         automaticallyImplyLeading: false,
-        actions: [
-          CustomPopupMenu(setMethodOfTranscript: setMethodOfTranscript)
-        ],
+        actions: const [CustomPopupMenu()],
       ),
-      body: Character(setMethodOfTranscript: setMethodOfTranscript),
+      body: Character(key: globals.characterKey),
     );
   }
 }
