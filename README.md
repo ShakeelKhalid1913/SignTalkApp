@@ -6,7 +6,6 @@
 
 # About
 
-We are group of students from the GIFT University, Gujranwala, Pakistan.
 We are working on a project to convert speech, audio and text into sign language.
 We are using Flutter for the mobile app and Python for the server.
 
@@ -15,16 +14,9 @@ We are using Flutter for the mobile app and Python for the server.
 - Flutter
 - Python
 - FastAPI (Server)
-- Whisper API (Transformer, Speech to Text)
+- Whisper, Assembly API (Transformer, Speech to Text)
 - NLP (Glossary)
 - YoutubeTranscript API (Transcript)
-
-# Team Members
-
-- Shakeel Khalid
-- Ali Raza
-- Yaseen
-- Salman Ahmad
 
 # usage
 
